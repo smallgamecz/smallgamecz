@@ -2,7 +2,7 @@
   "name": "smallgame",
   "version": "0.0.1",
   "description": "smallgame",
-  "productName": "Small Game",
+  "productName": "SmallGame - online znalostní hra",
   "author": "Daniel Rataj <daniel.rataj@mall.cz>",
   "private": true,
   "scripts": {
