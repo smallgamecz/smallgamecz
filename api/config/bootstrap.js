@@ -34,12 +34,6 @@ module.exports.bootstrap = async function (done) {
     sails.log('[clean-rounds-without-game][DONE]')
   }
 
-  const cleanDemoGames = async function () {
-    sails.log('[clean-demo-games][START]')
-    await sails.helpers.cleanDemoGames()
-    sails.log(`[clean-demo-games][DONE]`)
-  }
-
   const cleanRoundMovesWithoutRound = async function () {
     sails.log('[clean-round-moves-without-round][START]')
     await sails.helpers.cleanRoundMovesWithoutRound()
@@ -47,7 +41,6 @@ module.exports.bootstrap = async function (done) {
   }
 
   cron.schedule('0 */3 * * *', async () => {
-    await cleanDemoGames()
     await cleanRoundsWithoutGame()
     await cleanRoundMovesWithoutRound()
   })

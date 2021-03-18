@@ -2,17 +2,12 @@ const JSend = require('jsend')
 
 module.exports = {
 
-  friendlyName: 'Import game data.',
+  friendlyName: 'Create a new game.',
 
   inputs: {
     // game id
-    id: {
-      type: 'string',
-      required: true
-    },
-    url: {
-      type: 'string',
-      required: true
+    source: {
+      type: 'string'
     }
   },
 
@@ -24,9 +19,14 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-      await sails.helpers.importQuestionsFromUrl(inputs.id, inputs.url)
+      const game = await Game.create().fetch()
 
-      return exits.success(true)
+      // if source is specified, import questions
+      if (inputs.source) {
+        await sails.helpers.importQuestionsFromUrl(game.id, inputs.source)
+      }
+
+      return exits.success(game)
     } catch (error) {
       if (error) {
         sails.log.error(error)

@@ -33,10 +33,10 @@ module.exports.policies = {
 
   GameController: blueprintTokenPolicy,
   'v1/faker/generate': 'token',
+  'v1/game/create': 'token',
   'v1/game/backup': 'token',
   'v1/game/restore': 'token',
   'v1/game/import': 'token',
-  'v1/game/demo': 'token',
   'v1/question/timer': 'token',
   'v1/round/running': 'token',
   'v1/round/reserve-questions': 'token',

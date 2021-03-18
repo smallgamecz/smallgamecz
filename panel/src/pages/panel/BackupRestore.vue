@@ -23,6 +23,7 @@
             />
           </div>
           <div class="col-12" v-if="exported.length">
+            <p class="q-mt-md text-red">Otázky si zkopírujte a uložte někam do souboru.</p>
             <q-input
               v-model="exported"
               type="textarea"
@@ -138,13 +139,13 @@ export default {
             console.error(response)
 
             this.$smallgame.negative({
-              message: 'Není možné data obnovit.'
+              message: 'Není možné otázky obnovit.'
             })
             return false
           }
 
           this.$smallgame.positive({
-            message: 'Aktuální data jsme vám obnovili do této hry.'
+            message: 'Aktuální otázky jsme vám obnovili do této hry.'
           })
         })
       } catch (error) {
@@ -155,7 +156,7 @@ export default {
         }
 
         this.$smallgame.negative({
-          message: 'Není možné data obnovit.'
+          message: 'Není možné otázky obnovit.'
         })
       }
     }

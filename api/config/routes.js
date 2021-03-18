@@ -40,7 +40,7 @@ const routes = {
   'GET /v1/game': {
     response: 'notFound'
   },
-  'POST /v1/game/demo': 'v1/game/demo',
+  'POST /v1/game': 'v1/game/create',
   'POST /v1/game/:id/backup': 'v1/game/backup',
   'POST /v1/game/:id/restore': 'v1/game/restore',
   'POST /v1/game/:id/import': 'v1/game/import',

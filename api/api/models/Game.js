@@ -14,10 +14,6 @@ module.exports = {
       type: 'string',
       defaultsTo: ''
     },
-    demo: {
-      type: 'boolean',
-      defaultsTo: false
-    },
     rounds: {
       collection: 'round',
       via: 'game'

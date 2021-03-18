@@ -1,109 +1,70 @@
 <template>
   <q-page padding>
-    <div class="window-height row justify-center q-col-gutter-md">
-      <div class="col-xs-12 col-sm-6 col-md-4" v-if="activeBox === '' || activeBox === 'new'">
-        <q-card>
-          <q-card-section>
-            <h1 class="text-h5 q-ma-none" v-if="layout.default">
-              <q-icon name="gamepad" /> Nová hra
+    <div class="row justify-center">
+      <div class="col-8">
+        <div v-if="!game" class="row q-col-gutter-md">
+          <div class="col-12">
+            <h1 class="text-h6">
+              Vyberte sadu otázek, se kterou chcete začít.
             </h1>
-            <h1 class="text-h5 q-ma-none" v-if="!layout.default">
-              <q-icon name="done" /> Nová hra je připravena
+          </div>
+          <div class="col-12 text-right">
+            <q-btn outline @click="importFromUrl()">mám vlastní otázky</q-btn>
+          </div>
+          <div
+            v-for="category in categories" :key="category.id"
+            class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
+          >
+            <q-card class="cursor-pointer" @click="importFromUrl(category.url)">
+              <q-img
+                :src="`${baseUrl}/${category.image}`"
+              >
+                <div class="absolute-bottom text-subtitle2 text-center">
+                  {{ category.title }}
+                </div>
+              </q-img>
+            </q-card>
+          </div>
+        </div>
+        <div v-else class="row q-col-gutter-md">
+          <div class="col-12">
+            <h1 class="text-h6">
+              Díky moc. Hru jsme vám vytvořili.
             </h1>
-          </q-card-section>
-
-          <q-separator inset />
-
-          <q-card-section v-if="layout.default" class="use-min-height">
-            Kliknutím na tlačítko níže vytvoříte novou hru. Do ní pak můžete přidávat otázky a vytvářet soutěžní kola.
-          </q-card-section>
-
-          <q-card-section v-if="!layout.default">
-            Vytvořili jsme vám novou hru.
-            Uložte si odkaz, pod kterým bude vaše hra vždy dostupná.
-            V případě, že odkaz zapomenete, není možné se ke hře dostat.
-            <br>
-            <q-input
-              :value="getUrl"
-              readonly
-            />
-          </q-card-section>
-
-          <q-separator inset />
-
-          <q-card-actions>
-            <q-btn v-if="layout.default" class="bg-primary text-white full-width" @click="newGame">nová hra</q-btn>
-            <q-btn
-              v-if="!layout.default"
-              class="bg-primary text-white full-width"
-              @click="enterGame"
-            >vstoupit do hry</q-btn>
-          </q-card-actions>
-        </q-card>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-4" v-if="activeBox === '' || activeBox === 'demo'">
-        <q-card>
-          <q-card-section>
-            <h1 class="text-h5 q-ma-none" v-if="layout.default">
-              <q-icon name="gamepad" /> DEMO hra
-            </h1>
-            <h1 class="text-h5 q-ma-none" v-if="!layout.default">
-              <q-icon name="done" /> Hra je připravena
-            </h1>
-          </q-card-section>
-
-          <q-separator inset />
-
-          <q-card-section v-if="layout.default" class="use-min-height">
-            Kliknutím na tlačítko vytvoříte vytvoříte DEMO hru, která bude připravena hned ke hraní.
-            Z kapacitních důvodů jsou však tyto hry každých několik hodin smazány.
-          </q-card-section>
-
-          <q-card-section v-if="!layout.default">
-            Vytvořili jsme vám novou DEMO hru.
-            Uložte si odkaz, pod kterým bude vaše hra vždy dostupná.
-            V případě, že odkaz zapomenete, není možné se ke hře dostat.
-            <br>
-            <q-input
-              :value="getUrl"
-              readonly
-            />
-          </q-card-section>
-
-          <q-separator inset />
-
-          <q-card-actions>
-            <q-btn v-if="layout.default" class="bg-accent text-white full-width" @click="demoGame">nové DEMO</q-btn>
-            <q-btn
-              v-if="!layout.default"
-              class="bg-primary text-white full-width"
-              @click="enterGame"
-            >vstoupit do hry</q-btn>
-          </q-card-actions>
-        </q-card>
+            <p>
+              Uložte si odkaz, pod kterým bude správa vaší hra vždy dostupná. V případě, že odkaz zapomenete, není možné se ke hře dostat.
+            </p>
+            <p>
+              <a :href="this.getUrl">
+                {{ this.getUrl }}
+              </a>
+            </p>
+            <p>
+              <q-btn @click="enterGame">Pokračovat do hry</q-btn>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-    <q-inner-loading :showing="loading.create">
+    <q-inner-loading :showing="loading.import">
       <q-spinner-gears size="100px" color="primary" />
     </q-inner-loading>
   </q-page>
 </template>
 
 <script>
+import topics from '../helpers/import-questions'
 
 export default {
   name: 'CreateGameComponent',
   data () {
     return {
       loading: {
-        create: false
-      },
-      layout: {
-        default: true
+        import: false
       },
       game: null,
-      activeBox: ''
+      categories: topics.categories,
+      baseUrl: topics.baseUrl
     }
   },
   computed: {
@@ -112,62 +73,35 @@ export default {
     }
   },
   methods: {
-    newGame () {
-      this.activeBox = 'new'
-      this.game = null
-      this.layout.default = true
-
-      this.loading.create = true
-
+    async importFromUrl (source) {
       try {
-        this.$sailsIo.socket.post('/v1/game', (result) => {
-          this.loading.create = false
+        this.loading.import = true
+        const params = {}
 
-          if (!result) {
-            return this.$router.replace({
-              name: 'error.500'
+        if (source) {
+          params.source = `${this.baseUrl}/${source}`
+        }
+
+        this.$sailsIo.socket.post('/v1/game', params, response => {
+          console.log(response)
+          this.loading.import = false
+
+          if (!response || typeof response !== 'object') {
+            this.$smallgame.negative({
+              message: 'Momentálně není možné hru vytvořit. Zkuste to prosím za chvilku znovu.'
             })
+            return false
           }
 
-          this.game = result
-
-          this.layout.default = false
+          this.game = response
         })
       } catch (error) {
-        this.loading.create = false
+        this.loading.import = false
 
-        if (error) {
-          console.error(error)
-        }
-      }
-    },
-
-    demoGame () {
-      this.activeBox = 'demo'
-      this.game = null
-      this.layout.default = true
-      this.loading.create = true
-
-      try {
-        this.$sailsIo.socket.post('/v1/game/demo', (result) => {
-          this.loading.create = false
-
-          if (typeof result !== 'object' || !result.data) {
-            return this.$router.replace({
-              name: 'error.500'
-            })
-          }
-
-          this.game = result.data
-
-          this.layout.default = false
+        console.error(error)
+        this.$smallgame.negative({
+          message: 'Momentálně není možné hru vytvořit. Zkuste to prosím za chvilku znovu.'
         })
-      } catch (error) {
-        this.loading.create = false
-
-        if (error) {
-          console.error(error)
-        }
       }
     },
 

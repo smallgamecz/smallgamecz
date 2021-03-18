@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <div class="row q-col-gutter-sm">
-      <div v-if="game && !game.demo" class="col-12">
+      <div v-if="game" class="col-12">
         <q-chip icon="link">
           <a :href="getUrl">odkaz pro vstup do této sekce</a>
         </q-chip>
@@ -92,18 +92,19 @@ export default {
   name: 'PageDashboardIndex',
   data () {
     return {
-      game: null
+      game: null,
+      countOfQuestions: 0
     }
   },
   created () {
     this.fetch()
   },
   computed: {
-    isDemo () {
-      return this.game.demo
-    },
     getUrl () {
       return `${window.location.origin}/#/panel/verify?game=${this.game.url}`
+    },
+    hasQuestions () {
+      return this.countOfQuestions > 0
     }
   },
   methods: {
