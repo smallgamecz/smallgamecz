@@ -134,6 +134,7 @@ export default {
   },
   created () {
     this.fetch()
+    this.lastUsed()
   },
   methods: {
     fetch () {
@@ -163,6 +164,18 @@ export default {
           name
         }, (response) => {
           this.fetch()
+        })
+      } catch (error) {
+        if (error) {
+          console.error(error)
+        }
+      }
+    },
+
+    lastUsed () {
+      try {
+        this.$sailsIo.socket.patch(`/v1/game/${this.$route.params.id}`, {
+          lastSeen: Date.now()
         })
       } catch (error) {
         if (error) {

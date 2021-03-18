@@ -22,7 +22,7 @@ module.exports = {
       if (r.length) {
         sails.log(`[clean-round-moves-without-round][info] Founded ${r.length} record(-s).`)
       } else {
-        sails.log(`[clean-round-moves-without-round][info] No round moves without an active rount to clean.`)
+        sails.log(`[clean-round-moves-without-round][info] No round moves without an active round to clean.`)
       }
       return exits.success(true)
     } catch (error) {

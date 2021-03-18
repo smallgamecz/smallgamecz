@@ -40,9 +40,16 @@ module.exports.bootstrap = async function (done) {
     sails.log(`[clean-round-moves-without-round][DONE]`)
   }
 
-  cron.schedule('0 */3 * * *', async () => {
+  const cleanGamesWithoutRoundsLastVisitWeek = async function () {
+    sails.log('[clean-games-without-rounds-last-visit-week][START]')
+    await sails.helpers.cleanGamesWithoutRoundsLastVisitWeek()
+    sails.log(`[clean-games-without-rounds-last-visit-week][DONE]`)
+  }
+
+  cron.schedule('0 0 * * *', async () => {
     await cleanRoundsWithoutGame()
     await cleanRoundMovesWithoutRound()
+    await cleanGamesWithoutRoundsLastVisitWeek()
   })
 
   // setup round types in case they do not exist yet

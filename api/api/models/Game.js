@@ -17,6 +17,12 @@ module.exports = {
     rounds: {
       collection: 'round',
       via: 'game'
+    },
+    // timestamp
+    lastSeen: {
+      type: 'number',
+      columnType: 'datetime',
+      defaultsTo: Date.now()
     }
   },
 
