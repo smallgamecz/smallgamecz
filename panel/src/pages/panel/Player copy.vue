@@ -1,14 +1,26 @@
 <template>
-  <q-page>
+  <q-page padding>
     <template v-if="!loading.state">
-      <div class="row window-height items-center q-col-gutter-md text-center">
-        <div class="col-12">
+      <div class="row">
+        <div class="col-2">
+          <q-card class="bg-blue text-white">
+            <q-item>
+              <q-item-section>
+                <div class="text-h6">
+                  <q-icon round v-if="state.round.whoPlays === 1" name="double_arrow" />
+                  {{ state.round.player1 }}
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-card>
+        </div>
+        <div class="col-8 text-center">
           <div
             v-for="(question, index) in state.round.questions" :key="question.id"
             style="display: inline"
           >
             <q-btn
-              style="font-size: 150%"
+              style="font-size: 140%"
               round
               glossy
               :color="getQuestionButtonColor(question)"
@@ -21,41 +33,18 @@
               v-if="[1, 3, 6, 10, 15, 21].indexOf(index) > -1"
             >
           </div>
-
-          <div class="col-12">
-            <p>
-              <br>
-            </p>
-          </div>
-
-          <div class="col-12">
-            <div class="row q-col-gutter-md justify-center">
-              <div class="col-3">
-                <q-card class="bg-blue text-white" :class="{ 'light-dimmed': state.round.whoPlays === 2 }">
-                  <q-item>
-                    <q-item-section>
-                      <div class="text-h6">
-                        <q-icon round v-if="state.round.whoPlays === 1" name="double_arrow" size="150%" />
-                        {{ state.round.player1 }}
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                </q-card>
-              </div>
-              <div class="col-3">
-                <q-card class="bg-orange text-white"  :class="{ 'light-dimmed': state.round.whoPlays === 1 }">
-                  <q-item>
-                    <q-item-section>
-                      <div class="text-h6">
-                        <q-icon v-if="state.round.whoPlays === 2" name="double_arrow" size="150%" />
-                        {{ state.round.player2 }}
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                </q-card>
-              </div>
-            </div>
-          </div>
+        </div>
+        <div class="col-2">
+          <q-card class="bg-orange text-white">
+            <q-item>
+              <q-item-section>
+                <div class="text-h6">
+                  <q-icon v-if="state.round.whoPlays === 2" name="double_arrow" />
+                  {{ state.round.player2 }}
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-card>
         </div>
       </div>
 
@@ -109,7 +98,7 @@
             <div class="row text-center">
               <div class="col">
                 <div class="text-h5">
-                  <q-avatar color="primary" text-color="white" size="3em" font-size=".4em">
+                  <q-avatar color="primary" text-color="white">
                     {{ activeQuestion.help }}
                   </q-avatar>
                 </div>

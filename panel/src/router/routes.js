@@ -9,6 +9,14 @@ const routes = [
   },
 
   {
+    path: '/admin',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [
+      { path: '', name: 'admin.dashboard', component: () => import('pages/admin/Dashboard.vue'), meta: { admin: true } }
+    ]
+  },
+
+  {
     path: '/create',
     component: () => import('layouts/BlankLayout.vue'),
     children: [

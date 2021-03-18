@@ -78,12 +78,12 @@
             <div class="col-12">
               <div class="row q-col-gutter-sm">
                 <div class="col-12">
-                  <q-card class="bg-blue text-white">
+                  <q-card class="bg-blue text-white" :class="{ 'light-dimmed': state.round.whoPlays === 2 }">
                     <q-item>
                       <q-item-section>
                         <div class="text-h6">
-                          <q-icon v-if="state.round.whoPlays === 1" name="double_arrow" />
-                          <q-icon v-if="state.round.winner === 1" name="emoji_events" />
+                          <q-icon v-if="state.round.whoPlays === 1" name="double_arrow" size="150%" />
+                          <q-icon v-if="state.round.winner === 1" name="emoji_events" size="150%" />
                           {{ state.round.player1 }}
                         </div>
                       </q-item-section>
@@ -91,12 +91,12 @@
                   </q-card>
                 </div>
                 <div class="col-12">
-                  <q-card class="bg-orange text-white">
+                  <q-card class="bg-orange text-white" :class="{ 'light-dimmed': state.round.whoPlays === 1 }">
                     <q-item>
                       <q-item-section>
                         <div class="text-h6">
-                          <q-icon v-if="state.round.whoPlays === 2" name="double_arrow" />
-                          <q-icon v-if="state.round.winner === 2" name="emoji_events" />
+                          <q-icon v-if="state.round.whoPlays === 2" name="double_arrow" size="150%" />
+                          <q-icon v-if="state.round.winner === 2" name="emoji_events" size="150%" />
                           {{ state.round.player2 }}
                         </div>
                       </q-item-section>
