@@ -9,7 +9,7 @@
             </h1>
           </div>
           <div class="col-12 text-right">
-            <q-btn outline @click="importFromUrl()">mám vlastní otázky</q-btn>
+            <q-btn outline @click="importFromUrl()">přeskočit, mám vlastní otázky</q-btn>
           </div>
           <div
             v-for="category in categories" :key="category.id"
