@@ -64,7 +64,7 @@ module.exports = {
 
 
     if (this.req.isSocket) {
-      console.log(`Broadcasting 'round.reset' to round '${round}'`)
+      sails.log(`Broadcasting 'round.reset' to round '${round}'`)
       sails.sockets.broadcast(round, 'round', {
         action: 'round.reset',
         round: round

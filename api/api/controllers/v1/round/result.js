@@ -65,7 +65,7 @@ module.exports = {
       })
 
       if (this.req.isSocket) {
-        console.log(`Broadcasting 'round.result' to round '${inputs.round}'`)
+        sails.log(`Broadcasting 'round.result' to round '${inputs.round}'`)
         sails.sockets.broadcast(inputs.round, 'round', {
           action: 'round.result',
           round: inputs.round,

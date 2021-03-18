@@ -32,7 +32,7 @@ module.exports = {
     if (onlyNotify) {
       // broadcast notification, nothing else
       if (this.req.isSocket) {
-        console.log(`Broadcasting 'round.winner.by.chance.start' to round '${round}'`)
+        sails.log(`Broadcasting 'round.winner.by.chance.start' to round '${round}'`)
         sails.sockets.broadcast(round, 'round', {
           action: 'round.winner.by.chance.start'
         })
@@ -77,7 +77,7 @@ module.exports = {
       })
 
       if (this.req.isSocket) {
-        console.log(`Broadcasting 'round.winner.by.chance.end' to round '${foundedRound.id}'`)
+        sails.log(`Broadcasting 'round.winner.by.chance.end' to round '${foundedRound.id}'`)
         sails.sockets.broadcast(foundedRound.id, 'round', {
           action: 'round.winner.by.chance.end',
           winner

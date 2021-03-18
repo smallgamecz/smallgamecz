@@ -46,7 +46,7 @@ module.exports = {
       })
 
       if (this.req.isSocket) {
-        console.log(`Broadcasting 'round.select.question' to round '${foundedRound.id}'`)
+        sails.log(`Broadcasting 'round.select.question' to round '${foundedRound.id}'`)
         sails.sockets.broadcast(foundedRound.id, 'round', {
           action: 'round.select.question',
           state: true,

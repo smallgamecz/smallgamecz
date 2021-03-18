@@ -83,7 +83,6 @@ export default {
         }
 
         this.$sailsIo.socket.post('/v1/game', params, response => {
-          console.log(response)
           this.loading.import = false
 
           if (!response || typeof response !== 'object') {

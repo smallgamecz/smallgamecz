@@ -53,7 +53,7 @@ module.exports = {
             return exits.badRequest()
           }
 
-          console.log(`User joined round ID, event '${round.id}'.`)
+          sails.log(`User joined round ID, event '${round.id}'.`)
         })
       }
 

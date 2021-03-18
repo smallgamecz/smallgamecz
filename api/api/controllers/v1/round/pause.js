@@ -38,7 +38,7 @@ module.exports = {
       })
 
       if (this.req.isSocket) {
-        console.log(`Broadcasting 'round.pause' to round '${round.id}'`)
+        sails.log(`Broadcasting 'round.pause' to round '${round.id}'`)
         sails.sockets.broadcast(round.id, 'round', {
           action: 'round.pause',
           round: 'round'
@@ -51,7 +51,7 @@ module.exports = {
           return exits.badRequest()
         }
 
-        console.log(`User paused and leaved round ID '${round.id}'.`)
+        sails.log(`User paused and leaved round ID '${round.id}'.`)
       })
 
       return exits.success(JSend.success(round))

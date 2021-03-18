@@ -34,7 +34,7 @@ module.exports = {
 
       // broadcast
       if (this.req.isSocket) {
-        console.log(`Broadcasting 'round.timer' to round '${question.round}'`)
+        sails.log(`Broadcasting 'round.timer' to round '${question.round}'`)
         sails.sockets.broadcast(question.round, 'round', {
           action: 'round.timer',
           round: question.round,

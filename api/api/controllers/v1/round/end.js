@@ -61,7 +61,7 @@ module.exports = {
     }
 
     if (this.req.isSocket) {
-      console.log(`Broadcasting 'round.end' to round '${round}'`)
+      sails.log(`Broadcasting 'round.end' to round '${round}'`)
       sails.sockets.broadcast(round, 'round', {
         action: 'round.end',
         round: round
@@ -73,7 +73,7 @@ module.exports = {
           return exits.badRequest()
         }
 
-        console.log(`User round ended so leaving round ID '${round}'.`)
+        sails.log(`User round ended so leaving round ID '${round}'.`)
       })
     }
 
