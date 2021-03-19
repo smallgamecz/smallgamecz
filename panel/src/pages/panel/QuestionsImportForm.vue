@@ -25,23 +25,7 @@
           <br>
           Z každé kategorie importujeme vždy max. 100 otázek.
         </p>
-        <div class="row q-col-gutter-md">
-          <div
-            v-for="category in categories" :key="category.id"
-            class="col-sm-4 col-md-4 col-lg-3 col-12"
-          >
-            <q-card class="cursor-pointer" @click="importFromUrl(category.url)">
-              <q-img
-                :src="`${baseUrl}/${category.image}`"
-                basic
-              >
-                <div class="absolute-bottom text-subtitle2 text-center">
-                  {{ category.title }}
-                </div>
-              </q-img>
-            </q-card>
-          </div>
-        </div>
+        <list-of-topics @source="importFromUrl" />
       </q-tab-panel>
       <q-tab-panel name="url" class="q-gutter-md">
         <p>
@@ -75,19 +59,20 @@
 </template>
 
 <script>
-import topics from '../../helpers/import-questions'
+import ListOfTopics from '../../components/ListOfTopics'
 
 export default {
   name: 'PagesQuestionsImportForm',
+  components: {
+    ListOfTopics
+  },
   data () {
     return {
       loading: {
         import: false
       },
       tab: 'games',
-      url: '',
-      categories: topics.categories,
-      baseUrl: topics.baseUrl
+      url: ''
     }
   },
   methods: {
@@ -99,7 +84,7 @@ export default {
       try {
         this.loading.import = true
         this.$sailsIo.socket.post(`/v1/game/${this.$route.params.id}/import`, {
-          url: `${this.baseUrl}/${url}`
+          url
         }, response => {
           this.loading.import = false
 

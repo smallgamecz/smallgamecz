@@ -41,6 +41,7 @@ const routes = {
     response: 'notFound'
   },
   'POST /v1/game': 'v1/game/create',
+  'GET /v1/game/data': 'v1/game/data',
   'POST /v1/game/:id/backup': 'v1/game/backup',
   'POST /v1/game/:id/restore': 'v1/game/restore',
   'POST /v1/game/:id/import': 'v1/game/import',

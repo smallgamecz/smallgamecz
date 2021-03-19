@@ -2,30 +2,18 @@
   <q-page padding>
     <div class="row justify-center">
       <div class="col-8">
-        <div v-if="!game" class="row q-col-gutter-md">
-          <div class="col-12">
-            <h1 class="text-h6">
-              Vyberte sadu otázek, se kterou chcete začít.
-            </h1>
+        <template v-if="!game">
+          <div class="row q-col-gutter-md">
+            <div class="col-12">
+              <h1 class="text-h6">
+                Vyberte sadu otázek, se kterou chcete začít.
+              </h1>
+            </div>
+            <div class="col-12">
+              <list-of-topics :showEmptyValue="true" @source="importFromUrl" />
+            </div>
           </div>
-          <div class="col-12 text-right">
-            <q-btn outline @click="importFromUrl()">přeskočit, mám vlastní otázky</q-btn>
-          </div>
-          <div
-            v-for="category in categories" :key="category.id"
-            class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
-          >
-            <q-card class="cursor-pointer" @click="importFromUrl(category.url)">
-              <q-img
-                :src="`${baseUrl}/${category.image}`"
-              >
-                <div class="absolute-bottom text-subtitle2 text-center">
-                  {{ category.title }}
-                </div>
-              </q-img>
-            </q-card>
-          </div>
-        </div>
+        </template>
         <div v-else class="row q-col-gutter-md">
           <div class="col-12">
             <h1 class="text-h6">
@@ -53,24 +41,34 @@
 </template>
 
 <script>
-import topics from '../helpers/import-questions'
+import repository from '../helpers/import-questions'
+import ListOfTopics from '../components/ListOfTopics'
 
 export default {
   name: 'CreateGameComponent',
+  components: {
+    ListOfTopics
+  },
   data () {
     return {
       loading: {
         import: false
       },
       game: null,
-      categories: topics.categories,
-      baseUrl: topics.baseUrl
+      categories: []
     }
   },
   computed: {
     getUrl () {
       return `${window.location.origin}/#/panel/verify?game=${this.game.url}`
     }
+  },
+  created () {
+    this.$sailsIo.socket.get('/v1/game/data', {
+      repository: repository.repository
+    }, response => {
+      this.categories = response.data.content.categories
+    })
   },
   methods: {
     async importFromUrl (source) {
@@ -79,7 +77,7 @@ export default {
         const params = {}
 
         if (source) {
-          params.source = `${this.baseUrl}/${source}`
+          params.source = source
         }
 
         this.$sailsIo.socket.post('/v1/game', params, response => {
@@ -110,8 +108,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass" scoped>
-  .use-min-height
-    min-height: 130px
-</style>
