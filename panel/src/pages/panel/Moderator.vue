@@ -72,6 +72,19 @@
           </q-btn-group>
         </div>
       </div>
+      <div class="row q-mt-md q-mb-md">
+        <div class="col-12">
+          <q-btn
+            outline
+            :data-clipboard-text="socialLink"
+            icon="content_copy"
+            class="copy"
+          >
+          odkaz pro spoluhráče
+          <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
+          </q-btn>
+        </div>
+      </div>
       <div class="row q-col-gutter-lg">
         <div class="col-xs-12 col-md-4">
           <div class="row">
@@ -231,6 +244,7 @@
 </template>
 
 <script>
+import ClipboardJS from 'clipboard'
 import getQuestionDisabledState from '../../helpers/get-question-disabled-state'
 import getQuestionButtonColor from '../../helpers/get-question-button-color'
 import SelectRandomWinner from '../../components/SelectRandomWinner'
@@ -283,6 +297,9 @@ export default {
       } catch (_) {
         return false
       }
+    },
+    socialLink () {
+      return `${window.location.origin}/${this.$router.resolve({ name: 'panel.player', params: { id: this.$route.params.id, round: this.state.round.id } }).href}`
     }
   },
   watch: {
@@ -325,6 +342,11 @@ export default {
     }
 
     this.$mitt.on('round', this.handler)
+  },
+
+  mounted () {
+    // eslint-disable-next-line
+    new ClipboardJS('.copy')
   },
 
   destroyed () {

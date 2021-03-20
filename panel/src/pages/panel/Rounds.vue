@@ -53,14 +53,10 @@
               <div class="q-gutter-sm">
                 <q-btn
                   size="sm"
+                  outline
                   :to="{ name: 'panel.moderator', params: { id: $route.params.id, round: props.row.id }}"
                   :disable="playButtonStateDisabled(props.row)"
-                >Moderátor</q-btn>
-                <q-btn
-                  size="sm"
-                  :to="{ name: 'panel.player', params: { id: $route.params.id, round: props.row.id }}"
-                  :disable="playButtonStateDisabled(props.row)"
-                >Hráč</q-btn>
+                >hrát</q-btn>
               </div>
             </q-td>
             <q-td key="players" :props="props">

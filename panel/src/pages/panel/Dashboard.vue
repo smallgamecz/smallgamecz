@@ -51,24 +51,28 @@
       <div class="col-12">
         <h6 class="text-h6 q-mb-md">Průvodce</h6>
 
-        <q-list>
-          <q-item>
+        <p>Jen několik kroků vás dělí od začátku hry.</p>
+
+        <q-list bordered separator>
+          <q-item clickable v-ripple :to="{ name: 'panel.questions.new' }">
             <q-item-section avatar>
               <q-avatar color="secondary" text-color="white">1</q-avatar>
             </q-item-section>
 
             <q-item-section>
-              Vytvořte soutěžní otázky. Čím více soutěžních otázek vytvoříte, tím více kol můžete hrát.
+              <q-item-label overline>Kvízové otázky</q-item-label>
+              <q-item-label>Čím více otázek budete mít, tím více kol můžete hrát.</q-item-label>
             </q-item-section>
           </q-item>
 
-          <q-item>
+          <q-item clickable v-ripple :to="{ name: 'panel.rounds.new' }">
             <q-item-section avatar>
               <q-avatar color="secondary" text-color="white">2</q-avatar>
             </q-item-section>
 
             <q-item-section>
-              Přidejte nové soutěžní kolo.
+              <q-item-label overline>Soutěžní kola</q-item-label>
+              <q-item-label>Přidejte nové soutěžní kolo.</q-item-label>
             </q-item-section>
           </q-item>
 
@@ -78,7 +82,8 @@
             </q-item-section>
 
             <q-item-section>
-              Můžete hrát. Na stránce se soutěžními koli najdete dva odkazy - jeden pro moderátora a druhý pro hráče.
+              <q-item-label overline>Můžete hrát</q-item-label>
+              <q-item-label>Na stránce se soutěžními koli najdete dva odkazy - jeden pro moderátora a druhý pro hráče.</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -93,11 +98,13 @@ export default {
   data () {
     return {
       game: null,
-      countOfQuestions: 0
+      countOfQuestions: 0,
+      assistant: null
     }
   },
   created () {
     this.fetch()
+    this.fetchAssistant()
   },
   computed: {
     getUrl () {
@@ -114,6 +121,25 @@ export default {
           this.game = response
         })
       } catch (error) {
+        if (error) {
+          console.error(error)
+        }
+      }
+    },
+
+    fetchAssistant () {
+      try {
+        this.loading = true
+        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}/assistant`, response => {
+          this.loading = false
+
+          if (typeof response.data === 'object') {
+            this.assistant = response.data
+          }
+        })
+      } catch (error) {
+        this.loading = false
+
         if (error) {
           console.error(error)
         }
