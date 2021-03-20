@@ -165,7 +165,7 @@ export default {
       }
 
       // filter rounds that has no winner or not running or the have a questions
-      const freeRounds = this.items.filter(r => r.questions.length > 0 && r.running === false && r.winner === -1)
+      const freeRounds = this.items.filter(r => r.running === false && r.winner === -1)
 
       // count how much questions do we need
       let questionsNeeded = 0
