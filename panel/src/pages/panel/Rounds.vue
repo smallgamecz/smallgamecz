@@ -4,11 +4,12 @@
       Soutěžní kola
     </h1>
 
-    <div class="q-mb-md">
+    <div class="q-mb-md" v-if="this.items.length">
       <q-btn
+        icon="add"
         color="secondary"
         :to="{ name: 'panel.rounds.new', params: { id: $route.params.id } }"
-      >nové kolo</q-btn>
+      >přidat další kolo</q-btn>
     </div>
 
     <div v-if="!hasEnoughQuestions && !loading.questions" class="q-mb-md text-red">
@@ -56,7 +57,14 @@
                   outline
                   :to="{ name: 'panel.moderator', params: { id: $route.params.id, round: props.row.id }}"
                   :disable="playButtonStateDisabled(props.row)"
-                >hrát</q-btn>
+                >
+                  <template v-if="props.row.winner > -1">
+                    detail
+                  </template>
+                  <template v-else>
+                    hrát
+                  </template>
+                </q-btn>
               </div>
             </q-td>
             <q-td key="players" :props="props">
@@ -71,9 +79,23 @@
       </q-table>
     </div>
 
-    <div v-if="!this.items.length && !loading.items">
-      Nejsou tu žádná kola.
-    </div>
+    <q-banner class="bg-grey-3" v-if="!this.items.length && !loading.items">
+      <template v-slot:avatar>
+        <q-icon name="face" color="primary" />
+      </template>
+
+      Momentálně zde nejsou žádná soutěžní kola. Přidejte nové.
+
+      <template v-slot:action>
+        <q-btn
+          flat
+          icon="add"
+          color="secondary"
+          :to="{ name: 'panel.rounds.new', params: { id: $route.params.id } }"
+        >přidat nové kolo</q-btn>
+      </template>
+    </q-banner>
+
     <q-inner-loading :showing="loading.items || loading.delete">
       <q-spinner-gears size="100px" color="primary" />
     </q-inner-loading>

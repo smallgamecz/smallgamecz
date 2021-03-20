@@ -69,7 +69,7 @@
           <q-item-section
             avatar
           >
-            <q-icon name="help" />
+            <q-icon name="question_answer" />
           </q-item-section>
 
           <q-item-section>

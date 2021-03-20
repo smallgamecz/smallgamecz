@@ -72,7 +72,7 @@
           </q-btn-group>
         </div>
       </div>
-      <div class="row q-mt-md q-mb-md">
+      <div class="row q-mt-md q-mb-md" v-if="state.round.winner === -1">
         <div class="col-12">
           <q-btn
             outline
@@ -204,10 +204,12 @@
             <ul>
               <li v-for="question in state.round.questions" :key="question.id">
                 ({{ question.position }}) {{ question.title }}
-                <br>
-                Správně odpověděl:
-                <template v-if="question.winner === 1">{{ state.round.player1 }}</template>
-                <template v-if="question.winner === 2">{{ state.round.player2 }}</template>
+                <template v-if="question.winner > -1">
+                  <br>
+                  Správně odpověděl:
+                  <template v-if="question.winner === 1">{{ state.round.player1 }}</template>
+                  <template v-if="question.winner === 2">{{ state.round.player2 }}</template>
+                </template>
               </li>
             </ul>
           </div>

@@ -14,9 +14,11 @@
 
     <div class="q-mb-md">
       <q-btn
+        v-if="this.items.length"
+        icon="add"
         color="secondary"
         :to="{ name: 'panel.questions.new', params: { id: $route.params.id } }"
-      >nová otázka</q-btn>
+      >přidat další otázku</q-btn>
     </div>
 
     <div v-if="this.items.length">
@@ -72,9 +74,23 @@
       </q-table>
     </div>
 
-    <div v-if="!this.items.length && !loading.items">
-      Nejsou tu žádné otázky.
-    </div>
+    <q-banner class="bg-grey-3" v-if="!this.items.length && !loading.items">
+      <template v-slot:avatar>
+        <q-icon name="question_answer" color="primary" />
+      </template>
+
+      Momentálně zde nejsou žádné soutěžní otázky. Přidejte nové.
+
+      <template v-slot:action>
+        <q-btn
+          flat
+          icon="question_answer"
+          color="secondary"
+          :to="{ name: 'panel.questions.new', params: { id: $route.params.id } }"
+        >přidat novou otázku</q-btn>
+      </template>
+    </q-banner>
+
     <q-inner-loading :showing="loading.items || loading.delete">
       <q-spinner-gears size="100px" color="primary" />
     </q-inner-loading>
