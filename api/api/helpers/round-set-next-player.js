@@ -27,9 +27,9 @@ module.exports = {
 
         // select next player
         player = (who === 1 ? 2 : 1)
-      } else {
+      } else {
         // select ranndomly
-        player = players[Math.floor(Math.random() * players.length)]
+        player = await sails.helpers.selectRandomFromArray([1, 2])
       }
 
       await RoundMove.create({

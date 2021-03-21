@@ -84,6 +84,8 @@
           style="width: 600px"
           :class="{ 'bg-blue': state.round.whoPlays === 1, 'bg-orange': state.round.whoPlays === 2 }"
         >
+          <q-linear-progress color="red" size="md" :value="1 - (roundTimer / 100)" />
+
           <q-card-section class="text-h6">
             <div v-if="state.round.whoPlays === 1">
               <q-icon name="person" />
@@ -118,15 +120,6 @@
               </div>
             </div>
           </q-card-section>
-          <q-circular-progress
-            class="absolute-bottom-right q-ma-sm"
-            v-if="roundTimer"
-            v-model="roundTimer"
-            size="3em"
-            :thickness="0.5"
-            color="red"
-            center-color="gray"
-          />
         </q-card>
       </q-dialog>
     </template>

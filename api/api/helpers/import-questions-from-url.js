@@ -29,7 +29,7 @@ module.exports = {
         return q
       })
 
-      // take always 100 questions
+      // take max 100 questions
       // questions =  questions.slice(0, 100)
 
       // we cannot use "createEach" because of possible duplicates

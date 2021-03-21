@@ -134,60 +134,67 @@
               </div>
             </div>
 
-            <div class="col-12 q-mt-lg" v-if="activeQuestion">
-              <q-banner class="text-white" :class="{ 'bg-blue': state.round.whoPlays === 1, 'bg-orange': state.round.whoPlays === 2 }">
-                <template v-slot:avatar>
-                  <q-icon name="help" />
-                </template>
-                <div class="text-h6">
-                  {{ activeQuestion.title }}
-                </div>
-                <div class="text-h6">
-                  <q-avatar color="primary" text-color="white" size="2.5em" font-size=".4em">
-                    {{ activeQuestion.help }}
-                  </q-avatar>
+            <div class="col-12 q-mt-xl" v-if="activeQuestion">
+              <q-card class="text-white position-relative" :class="{ 'bg-blue': state.round.whoPlays === 1, 'bg-orange': state.round.whoPlays === 2 }">
+                <q-linear-progress color="red" size="md" :value="1 - (roundTimer / 100)" />
+                <q-card-section>
+                  <q-btn
+                    round
+                    class="bg-white text-black absolute-center"
+                    icon="timer"
+                    style="margin-top: -1.5em"
+                    @click="toggleRoundTimer"
+                  />
+                  <!-- <q-circular-progress
+                    v-if="roundTimer"
+                    v-model="roundTimer"
+                    class="absolute-center"
+                    style="margin-bottom: 31px"
+                    size="75px"
+                    :thickness="0.5"
+                    color="red"
+                    center-color="gray"
+                  /> -->
+                </q-card-section>
+                <q-card-section class="text-h6 q-pt-none">
+                  <q-icon name="help" /> {{ activeQuestion.title }}
+                </q-card-section>
+                <div class="text-h2 text-center">
+                  <q-card class="bg-primary">
+                    <q-card-section>
+                      {{ activeQuestion.help }}
+                    </q-card-section>
+                  </q-card>
                 </div>
                 <q-separator />
-                <div class="q-mt-md text-h6">
+                <q-card-section class="q-mt-md text-h6">
                   <q-icon name="question_answer" /> {{ activeQuestion.answer }}
-                </div>
-                <template v-slot:action align="around">
-                  <q-btn
-                    color="green"
-                    label="Správně"
-                    @click="updatePlayerResult(1)"
-                    :disable="state.round.running === false"
-                    icon="check_circle"
-                  />
-                  <q-btn
-                    color="red"
-                    label="Chybně"
-                    @click="updatePlayerResult(0)"
-                    :disable="state.round.running === false"
-                    icon="dangerous"
-                  />
-                </template>
-              </q-banner>
-            </div>
-
-            <div class="col-12 q-mt-md" v-if="activeQuestion">
-              <q-btn
-                label="časovač"
-                outline
-                color="accent"
-                icon="timer"
-                @click="toggleRoundTimer"
-              />
-              <div class="q-mt-sm">
-                <q-circular-progress
-                  v-if="roundTimer"
-                  v-model="roundTimer"
-                  size="75px"
-                  :thickness="0.5"
-                  color="red"
-                  center-color="gray"
-                />
-              </div>
+                </q-card-section>
+                <q-card-section>
+                  <div class="row q-col-gutter-sm">
+                    <div class="col-xs-12 col-sm-6">
+                      <q-btn
+                        color="green"
+                        label="Správně"
+                        class="full-width"
+                        @click="updatePlayerResult(1)"
+                        :disable="state.round.running === false"
+                        icon="check_circle"
+                      />
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                      <q-btn
+                        color="red"
+                        label="Chybně"
+                        class="full-width"
+                        @click="updatePlayerResult(0)"
+                        :disable="state.round.running === false"
+                        icon="dangerous"
+                      />
+                    </div>
+                  </div>
+                </q-card-section>
+              </q-card>
             </div>
           </div>
 

@@ -50,8 +50,7 @@ module.exports = {
         return exits.notFound()
       }
 
-      const players = [1, 2]
-      const winner = players[Math.floor(Math.random() * players.length)]
+      const winner = await sails.helpers.selectRandomFromArray([1, 2])
 
       await Question.updateOne({
         id: question
