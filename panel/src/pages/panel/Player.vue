@@ -25,7 +25,7 @@
 
           <div class="col-12 q-ma-lg">
             <div class="row q-col-gutter-md justify-center">
-              <div class="col-4">
+              <div class="col-xs-12 col-sm-4">
                 <q-card class="bg-blue text-white" :class="{ 'light-dimmed': state.round.whoPlays === 2 }">
                   <q-item>
                     <q-item-section>
@@ -37,7 +37,7 @@
                   </q-item>
                 </q-card>
               </div>
-              <div class="col-4">
+              <div class="col-xs-12 col-sm-4">
                 <q-card class="bg-orange text-white"  :class="{ 'light-dimmed': state.round.whoPlays === 1 }">
                   <q-item>
                     <q-item-section>
