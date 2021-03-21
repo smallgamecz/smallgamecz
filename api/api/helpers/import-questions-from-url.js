@@ -30,7 +30,7 @@ module.exports = {
       })
 
       // take always 100 questions
-      questions =  questions.slice(0, 100)
+      // questions =  questions.slice(0, 100)
 
       // we cannot use "createEach" because of possible duplicates
       for (const q of questions) {

@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import ClipboardJS from 'clipboard'
 import repository from '../helpers/import-questions'
 import ListOfTopics from '../components/ListOfTopics'
 
@@ -82,6 +83,10 @@ export default {
     }, response => {
       this.categories = response.data.content.categories
     })
+  },
+  mounted () {
+    // eslint-disable-next-line
+    new ClipboardJS('.copy')
   },
   methods: {
     async importFromUrl (source) {
