@@ -14,9 +14,10 @@
               <q-img
                 :src="category.image"
               >
-                <div class="absolute-bottom text-subtitle2 text-center">
+                <div class="absolute-bottom">
                   {{ category.name }}
                 </div>
+                <q-chip class="absolute-top-right bg-accent">{{ category.count }}</q-chip>
               </q-img>
             </q-card>
           </div>
