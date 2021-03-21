@@ -1,5 +1,6 @@
 <template>
   <q-page>
+    <player-sound-icon />
     <template v-if="!loading.state">
       <div class="row window-height items-center q-col-gutter-md text-center">
         <div class="col-12">
@@ -22,15 +23,9 @@
             >
           </div>
 
-          <div class="col-12">
-            <p>
-              <br>
-            </p>
-          </div>
-
-          <div class="col-12">
+          <div class="col-12 q-ma-lg">
             <div class="row q-col-gutter-md justify-center">
-              <div class="col-3">
+              <div class="col-4">
                 <q-card class="bg-blue text-white" :class="{ 'light-dimmed': state.round.whoPlays === 2 }">
                   <q-item>
                     <q-item-section>
@@ -42,7 +37,7 @@
                   </q-item>
                 </q-card>
               </div>
-              <div class="col-3">
+              <div class="col-4">
                 <q-card class="bg-orange text-white"  :class="{ 'light-dimmed': state.round.whoPlays === 1 }">
                   <q-item>
                     <q-item-section>
@@ -128,7 +123,6 @@
       <q-spinner-gears size="100px" color="primary" />
     </q-inner-loading>
 
-    <player-sound-icon />
     <select-random-winner :start="randomizeWinner" :stop-with-winner="randomizedWinnerIs" />
   </q-page>
 </template>

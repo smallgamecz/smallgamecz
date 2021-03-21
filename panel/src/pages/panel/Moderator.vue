@@ -145,16 +145,6 @@
                     style="margin-top: -1.5em"
                     @click="toggleRoundTimer"
                   />
-                  <!-- <q-circular-progress
-                    v-if="roundTimer"
-                    v-model="roundTimer"
-                    class="absolute-center"
-                    style="margin-bottom: 31px"
-                    size="75px"
-                    :thickness="0.5"
-                    color="red"
-                    center-color="gray"
-                  /> -->
                 </q-card-section>
                 <q-card-section class="text-h6 q-pt-none">
                   <q-icon name="help" /> {{ activeQuestion.title }}
