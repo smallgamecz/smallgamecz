@@ -30,15 +30,25 @@
             hint="Doplňte otázku."
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit otázku.']"
-          />
+          >
+            <template v-slot:before>
+              <q-icon name="help_center" />
+            </template>
+          </q-input>
+
           <q-input
             filled
             v-model="form.help"
             label="Nápověda (písmena) *"
             hint="Doplňte nápovědu k otázce."
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit nápovědu k otázce.']"
-          />
+            :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit první znaky nápovědy.']"
+          >
+            <template v-slot:before>
+              <q-icon name="support" />
+            </template>
+          </q-input>
+
           <q-input
             filled
             v-model="form.answer"
@@ -46,7 +56,11 @@
             hint="Doplňte odpověď na otázku."
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit odpověď na otázku.']"
-          />
+          >
+            <template v-slot:before>
+              <q-icon name="question_answer" />
+            </template>
+          </q-input>
         </q-tab-panel>
       </q-tab-panels>
 

@@ -108,10 +108,12 @@
           <q-card-section>
             <div class="row text-center">
               <div class="col">
-                <div class="text-h5">
-                  <q-avatar color="primary" text-color="white" size="3em" font-size=".4em">
-                    {{ activeQuestion.help }}
-                  </q-avatar>
+                <div class="text-h2">
+                  <q-card class="bg-primary">
+                    <q-card-section>
+                      {{ activeQuestion.help }}
+                    </q-card-section>
+                  </q-card>
                 </div>
               </div>
             </div>

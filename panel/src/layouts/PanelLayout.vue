@@ -48,6 +48,22 @@
         <q-item
           clickable
           tag="a"
+          :to="{ name: 'panel.moderator' }"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="img:/logo/app.svg" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Nová hra</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item
+          clickable
+          tag="a"
           :to="{ name: 'panel.rounds' }"
         >
           <q-item-section

@@ -7,14 +7,14 @@
         </q-chip>
       </div>
       <div class="col-sm-4 col-md-4 col-lg-3 col-12">
-        <router-link :to="{ name: 'panel.rounds' }">
+        <router-link :to="{ name: 'panel.moderator' }">
           <q-card>
             <q-img
               src="~assets/panel/rounds.png"
               basic
             >
               <div class="absolute-bottom text-subtitle2 text-center">
-                Soutěžní kola
+                Hraj
               </div>
             </q-img>
           </q-card>
@@ -65,25 +65,14 @@
             </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple :to="{ name: 'panel.rounds.new' }">
+          <q-item clickable v-ripple :to="{ name: 'panel.moderator' }">
             <q-item-section avatar>
               <q-avatar color="secondary" text-color="white">2</q-avatar>
             </q-item-section>
 
             <q-item-section>
               <q-item-label overline>Soutěžní kola</q-item-label>
-              <q-item-label>Přidejte nové soutěžní kolo.</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section avatar>
-              <q-avatar color="secondary" text-color="white">3</q-avatar>
-            </q-item-section>
-
-            <q-item-section>
-              <q-item-label overline>Můžete hrát</q-item-label>
-              <q-item-label>Na stránce se soutěžními koli najdete dva odkazy - jeden pro moderátora a druhý pro hráče.</q-item-label>
+              <q-item-label>Přidejte nové soutěžní kolo a můžete hned hrát.</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -133,7 +122,7 @@ export default {
         this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}/assistant`, response => {
           this.loading = false
 
-          if (typeof response.data === 'object') {
+          if (response && typeof response.data === 'object') {
             this.assistant = response.data
           }
         })

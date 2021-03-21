@@ -2,7 +2,7 @@
   <q-dialog v-model="start" persistent transition-show="scale" transition-hide="scale">
     <q-card class="bg-transparent no-border no-box-shadow">
       <q-card-section>
-        <q-avatar :color="color" size="10em" :icon="icon" text-color="white" />
+        <q-avatar :color="color" size="15em" :icon="icon" text-color="white" />
       </q-card-section>
     </q-card>
   </q-dialog>

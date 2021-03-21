@@ -16,8 +16,7 @@ module.exports = {
 
   fn: async function ({ round }, exits) {
     try {
-      const players = [1, 2]
-      const player = players[Math.floor(Math.random() * players.length)]
+      const player = await sails.helpers.selectRandomFromArray([0, 1])
 
       await RoundMove.create({
         round,
@@ -27,7 +26,7 @@ module.exports = {
     } catch (error) {
       if (error) {
         // log but do nothing else
-        sail.log.error(error)
+        sails.log.error(error)
       }
     }
 

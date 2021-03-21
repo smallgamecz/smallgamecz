@@ -23,13 +23,26 @@
               Uložte si odkaz, pod kterým bude správa vaší hra vždy dostupná. V případě, že odkaz zapomenete, není možné se ke hře dostat.
             </p>
             <p>
-              <a :href="this.getUrl">
-                {{ this.getUrl }}
-              </a>
+              <q-btn
+                :data-clipboard-text="this.getUrl"
+                icon="content_copy"
+                class="copy"
+              >
+                zkopírovat do schránky
+                <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
+              </q-btn>
             </p>
-            <p>
-              <q-btn @click="enterGame">Pokračovat do hry</q-btn>
-            </p>
+          </div>
+          <div class="col-12 text-center q-mt-xl">
+            <q-btn
+              icon="follow_the_signs"
+              size="5em"
+              round
+              color="primary"
+              @click="enterGame"
+            >
+              <q-tooltip>vstoupit do hry</q-tooltip>
+            </q-btn>
           </div>
         </div>
       </div>

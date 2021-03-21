@@ -43,14 +43,12 @@ const routes = [
       { path: ':id/questions/:question', name: 'panel.questions.edit', component: () => import('pages/panel/QuestionsForm.vue'), meta: { edit: true, auth: true } },
       { path: ':id/rounds', name: 'panel.rounds', component: () => import('pages/panel/Rounds.vue'), meta: { auth: true } },
       { path: ':id/rules', name: 'panel.rules', component: () => import('pages/panel/Rules.vue'), meta: { auth: true } },
-      { path: ':id/importexport', name: 'panel.backuprestore', component: () => import('pages/panel/BackupRestore.vue'), meta: { auth: true } },
-      { path: ':id/rounds/new', name: 'panel.rounds.new', component: () => import('pages/panel/RoundsForm.vue'), meta: { auth: true } },
-      { path: ':id/rounds/:round', name: 'panel.rounds.edit', component: () => import('pages/panel/RoundsForm.vue'), meta: { edit: true, auth: true } }
+      { path: ':id/importexport', name: 'panel.backuprestore', component: () => import('pages/panel/BackupRestore.vue'), meta: { auth: true } }
     ]
   },
 
   {
-    path: '/panel/:id/rounds/:round/moderator',
+    path: '/panel/:id/rounds/:round?/moderator',
     component: () => import('layouts/PlayLayout'),
     children: [
       { path: '', name: 'panel.moderator', component: () => import('pages/panel/Moderator.vue'), meta: { auth: true } }

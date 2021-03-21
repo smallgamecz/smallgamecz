@@ -1,7 +1,7 @@
 <template>
   <q-layout>
     <q-page-container>
-      <template v-if="!$q.screen.gt.xs">
+      <!-- <template v-if="!$q.screen.gt.xs">
         <q-banner class="bg-primary text-white q-ma-md">
           <template v-slot:avatar>
             <q-icon name="info" />
@@ -10,8 +10,9 @@
           <br>
           Použijte proto větší obrazovku. Děkujeme.
         </q-banner>
-      </template>
-      <router-view v-else />
+      </template> -->
+      <!-- <router-view v-else /> -->
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>

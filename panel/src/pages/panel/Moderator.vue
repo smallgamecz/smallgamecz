@@ -1,240 +1,266 @@
 <template>
   <q-page padding>
     <template v-if="!loading.state">
-      <q-banner v-if="state.round.running === false && state.round.winner > -1" class="bg-primary text-white q-mb-lg">
-        <template v-slot:avatar>
-          <q-icon name="info" />
-        </template>
+      <template v-if="showRoundForm">
+        <rounds-form @update="roundFormCreate" />
+      </template>
 
-        Hra byla již ukončena,
-        <template v-if="state.round.winner === 0">
-          remízou.
-        </template>
-        <template v-if="state.round.winner > 0">
-          vítězem je <i>{{ state.round.winner === 1 ? state.round.player1 : state.round.player2 }}</i>.
-        </template>
-      </q-banner>
+      <template v-else>
+        <q-banner v-if="state.round.running === false && state.round.winner > -1" class="bg-primary text-white q-mb-lg">
+          <template v-slot:avatar>
+            <q-icon name="info" />
+          </template>
 
-      <q-banner v-if="state.round.running === false && state.round.winner === -1" class="bg-primary text-white q-mb-lg">
-        <template v-slot:avatar>
-          <q-icon name="info" />
-        </template>
-        Nezapomeňte hru zahájit stisknutím tlačítka.
-      </q-banner>
+          Hra byla již ukončena,
+          <template v-if="state.round.winner === 0">
+            remízou.
+          </template>
+          <template v-if="state.round.winner > 0">
+            vítězem je <i>{{ state.round.winner === 1 ? state.round.player1 : state.round.player2 }}</i>.
+          </template>
+        </q-banner>
 
-      <div class="row q-mb-md">
-        <div class="col">
-          <q-btn-group>
-            <q-btn
-              icon="keyboard_backspace"
-              @click="goBack"
-            >
-              zpět
-            </q-btn>
-            <template v-if="state.round.winner === -1">
+        <q-banner v-if="state.round.running === false && state.round.winner === -1" class="bg-primary text-white q-mb-lg">
+          <template v-slot:avatar>
+            <q-icon name="info" />
+          </template>
+          Nezapomeňte hru zahájit stisknutím tlačítka.
+        </q-banner>
+
+        <div class="row q-mb-md">
+          <div class="col">
+            <q-btn-group>
               <q-btn
-                color="secondary"
-                icon="pause"
-                @click="pauseRound"
-                :disable="loading.pause || !isRunning"
-                v-if="isRunning"
+                icon="keyboard_backspace"
+                @click="goBack"
               >
-                pozastavit hru
+                zpět
               </q-btn>
-              <q-btn
-                color="secondary"
-                icon="play_arrow"
-                @click="startRound"
-                :disable="loading.start || isRunning"
-                v-if="!isRunning"
-              >
-                spustit hru
-              </q-btn>
-            </template>
-            <q-btn
-              color="secondary"
-              icon="refresh"
-              @click="resetRound"
-              :disable="loading.pause"
-              v-if="state.round.winner === -1"
-            >
-              reset hry
-            </q-btn>
-            <q-btn
-              v-if="state.round.winner === -1"
-              color="secondary"
-              icon="emoji_events"
-              @click="endRound"
-              :disable="loading.start || !isRunning"
-            >
-              ukončit hru
-            </q-btn>
-          </q-btn-group>
-        </div>
-      </div>
-      <div class="row q-mt-md q-mb-md" v-if="state.round.winner === -1">
-        <div class="col-12">
-          <q-btn
-            outline
-            :data-clipboard-text="socialLink"
-            icon="content_copy"
-            class="copy"
-          >
-          odkaz pro spoluhráče
-          <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
-          </q-btn>
-        </div>
-      </div>
-      <div class="row q-col-gutter-lg">
-        <div class="col-xs-12 col-md-4">
-          <div class="row">
-            <div class="col-12">
-              <div class="row q-col-gutter-sm">
-                <div class="col-12">
-                  <q-card class="bg-blue text-white" :class="{ 'light-dimmed': state.round.whoPlays === 2 }">
-                    <q-item>
-                      <q-item-section>
-                        <div class="text-h6">
-                          <q-icon v-if="state.round.whoPlays === 1" name="double_arrow" size="150%" />
-                          <q-icon v-if="state.round.winner === 1" name="emoji_events" size="150%" />
-                          {{ state.round.player1 }}
-                        </div>
-                      </q-item-section>
-                    </q-item>
-                  </q-card>
-                </div>
-                <div class="col-12">
-                  <q-card class="bg-orange text-white" :class="{ 'light-dimmed': state.round.whoPlays === 1 }">
-                    <q-item>
-                      <q-item-section>
-                        <div class="text-h6">
-                          <q-icon v-if="state.round.whoPlays === 2" name="double_arrow" size="150%" />
-                          <q-icon v-if="state.round.winner === 2" name="emoji_events" size="150%" />
-                          {{ state.round.player2 }}
-                        </div>
-                      </q-item-section>
-                    </q-item>
-                  </q-card>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12 q-mt-lg" v-if="activeQuestion">
-            <q-banner class="text-white" :class="{ 'bg-blue': state.round.whoPlays === 1, 'bg-orange': state.round.whoPlays === 2 }">
-              <template v-slot:avatar>
-                <q-icon name="help" />
-              </template>
-              <div class="text-h6">
-                {{ activeQuestion.title }}
-              </div>
-              <div class="text-h6">
-                <q-avatar color="primary" text-color="white" size="2.5em" font-size=".4em">
-                  {{ activeQuestion.help }}
-                </q-avatar>
-              </div>
-              <q-separator />
-              <div class="q-mt-md text-h6">
-                <q-icon name="question_answer" /> {{ activeQuestion.answer }}
-              </div>
-              <template v-slot:action align="around">
+              <template v-if="state.round.winner === -1">
                 <q-btn
-                  color="green"
-                  label="Správně"
-                  @click="updatePlayerResult(1)"
-                  :disable="state.round.running === false"
-                  icon="check_circle"
-                />
-                <q-btn
-                  color="red"
-                  label="Chybně"
-                  @click="updatePlayerResult(0)"
-                  :disable="state.round.running === false"
-                  icon="dangerous"
-                />
-              </template>
-            </q-banner>
-          </div>
-
-          <div class="col-12 q-mt-md" v-if="activeQuestion">
-            <q-btn
-              label="časovač"
-              outline
-              color="accent"
-              icon="timer"
-              @click="toggleRoundTimer"
-            />
-            <div class="q-mt-sm">
-              <q-circular-progress
-                v-if="roundTimer"
-                v-model="roundTimer"
-                size="75px"
-                :thickness="0.5"
-                color="red"
-                center-color="gray"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xs-12 col-md-8">
-          <div v-if="state.round.winner === -1" class="text-center">
-            <div
-              v-for="(question, index) in state.round.questions" :key="question.id"
-              style="display: inline"
-            >
-              <q-btn
-                style="font-size: 140%"
-                round
-                glossy
-                :color="getQuestionButtonColor(question)"
-                class="q-ma-xs"
-                @click="selectQuestion(question, index + 1)"
-                :disable="getQuestionDisabledState(question)"
+                  color="secondary"
+                  icon="pause"
+                  @click="pauseRound"
+                  :disable="loading.pause || !isRunning"
+                  v-if="isRunning"
                 >
-                {{ ++index }}
-              </q-btn>
-              <br
-                v-if="[1, 3, 6, 10, 15, 21].indexOf(index) > -1"
+                  pozastavit hru
+                </q-btn>
+                <q-btn
+                  color="secondary"
+                  icon="play_arrow"
+                  @click="startRound"
+                  :disable="loading.start || isRunning"
+                  v-if="!isRunning"
+                >
+                  spustit hru
+                </q-btn>
+              </template>
+              <q-btn
+                color="secondary"
+                icon="refresh"
+                @click="resetRound"
+                :disable="loading.pause"
+                v-if="state.round.winner === -1"
               >
+                reset hry
+              </q-btn>
+              <q-btn
+                v-if="state.round.winner === -1"
+                color="secondary"
+                icon="emoji_events"
+                @click="endRound"
+                :disable="loading.start || !isRunning"
+              >
+                ukončit hru
+              </q-btn>
+            </q-btn-group>
+          </div>
+        </div>
+        <div class="row q-mt-md q-mb-md" v-if="state.round.winner === -1">
+          <div class="col-12">
+            <q-btn-group>
+              <q-btn
+                type="a"
+                :href="socialLink"
+                target="_blank"
+                icon="link"
+              >
+                odkaz pro hráče
+              </q-btn>
+              <q-separator vertical inset />
+              <q-btn
+                icon="content_copy"
+                class="copy"
+                :data-clipboard-text="socialLink"
+              >
+                <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
+              </q-btn>
+            </q-btn-group>
+          </div>
+        </div>
+        <div class="row q-col-gutter-lg">
+          <div class="col-xs-12 col-md-4">
+            <div class="row q-col-gutter-md">
+              <div class="col-12">
+                <div class="row q-col-gutter-sm">
+                  <div class="col-12">
+                    <q-card class="bg-blue text-white" :class="{ 'light-dimmed': state.round.whoPlays === 2 }">
+                      <q-item>
+                        <q-item-section>
+                          <div class="text-h6">
+                            <q-icon v-if="state.round.whoPlays === 1" name="double_arrow" size="150%" />
+                            <q-icon v-if="state.round.winner === 1" name="emoji_events" size="150%" />
+                            {{ state.round.player1 }}
+                          </div>
+                        </q-item-section>
+                      </q-item>
+                    </q-card>
+                  </div>
+                  <div class="col-12">
+                    <q-card class="bg-orange text-white" :class="{ 'light-dimmed': state.round.whoPlays === 1 }">
+                      <q-item>
+                        <q-item-section>
+                          <div class="text-h6">
+                            <q-icon v-if="state.round.whoPlays === 2" name="double_arrow" size="150%" />
+                            <q-icon v-if="state.round.winner === 2" name="emoji_events" size="150%" />
+                            {{ state.round.player2 }}
+                          </div>
+                        </q-item-section>
+                      </q-item>
+                    </q-card>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 q-mt-lg" v-if="activeQuestion">
+              <q-banner class="text-white" :class="{ 'bg-blue': state.round.whoPlays === 1, 'bg-orange': state.round.whoPlays === 2 }">
+                <template v-slot:avatar>
+                  <q-icon name="help" />
+                </template>
+                <div class="text-h6">
+                  {{ activeQuestion.title }}
+                </div>
+                <div class="text-h6">
+                  <q-avatar color="primary" text-color="white" size="2.5em" font-size=".4em">
+                    {{ activeQuestion.help }}
+                  </q-avatar>
+                </div>
+                <q-separator />
+                <div class="q-mt-md text-h6">
+                  <q-icon name="question_answer" /> {{ activeQuestion.answer }}
+                </div>
+                <template v-slot:action align="around">
+                  <q-btn
+                    color="green"
+                    label="Správně"
+                    @click="updatePlayerResult(1)"
+                    :disable="state.round.running === false"
+                    icon="check_circle"
+                  />
+                  <q-btn
+                    color="red"
+                    label="Chybně"
+                    @click="updatePlayerResult(0)"
+                    :disable="state.round.running === false"
+                    icon="dangerous"
+                  />
+                </template>
+              </q-banner>
+            </div>
+
+            <div class="col-12 q-mt-md" v-if="activeQuestion">
+              <q-btn
+                label="časovač"
+                outline
+                color="accent"
+                icon="timer"
+                @click="toggleRoundTimer"
+              />
+              <div class="q-mt-sm">
+                <q-circular-progress
+                  v-if="roundTimer"
+                  v-model="roundTimer"
+                  size="75px"
+                  :thickness="0.5"
+                  color="red"
+                  center-color="gray"
+                />
+              </div>
             </div>
           </div>
-          <div v-else>
+
+          <div class="col-xs-12 col-md-8">
+            <div v-if="state.round.winner === -1" class="text-center">
+              <div
+                v-for="(question, index) in state.round.questions" :key="question.id"
+                style="display: inline"
+              >
+                <q-btn
+                  style="font-size: 140%"
+                  round
+                  glossy
+                  :color="getQuestionButtonColor(question)"
+                  class="q-ma-xs"
+                  @click="selectQuestion(question, index + 1)"
+                  :disable="getQuestionDisabledState(question)"
+                  >
+                  {{ ++index }}
+                </q-btn>
+                <br
+                  v-if="[1, 3, 6, 10, 15, 21].indexOf(index) > -1"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" v-if="usedQuestions.length > 0">
+          <div class="col q-mt-md">
             <h3 class="text-h6 q-ma-none">Použité otázky</h3>
             <ul>
-              <li v-for="question in state.round.questions" :key="question.id">
-                ({{ question.position }}) {{ question.title }}
+              <li v-for="question in usedQuestions" :key="question.id">
+                <template v-if="question.position">
+                  ({{ question.position - 1 }})
+                </template>
+                {{ question.title }}
                 <template v-if="question.winner > -1">
                   <br>
                   Správně odpověděl:
-                  <template v-if="question.winner === 1">{{ state.round.player1 }}</template>
-                  <template v-if="question.winner === 2">{{ state.round.player2 }}</template>
+                  <template v-if="question.winner === 0">---</template>
+                  <template v-if="question.winner === 1">
+                    <span class="text-blue">{{ state.round.player1 }}</span>
+                  </template>
+                  <template v-if="question.winner === 2">
+                    <span class="text-orange">{{ state.round.player2 }}</span>
+                  </template>
                 </template>
               </li>
             </ul>
           </div>
         </div>
-      </div>
 
-      <q-dialog :value="endRoundState" @hide="endRoundState = false">
-        <q-card class="bg-primary text-white" style="width: 600px">
-          <q-separator inset />
-          <q-card-section>
-            <div class="text-h6">
-              <q-icon name="emoji_events" /> Vyberte, kdo zvítězil. Volbou současně ukončíte hru.
-            </div>
-          </q-card-section>
+        <q-dialog :value="endRoundState" @hide="endRoundState = false">
+          <q-card class="bg-primary text-white" style="width: 600px">
+            <q-separator inset />
+            <q-card-section>
+              <div class="text-h6">
+                <q-icon name="emoji_events" /> Vyberte, kdo zvítězil. Volbou současně ukončíte hru.
+              </div>
+            </q-card-section>
 
-          <q-separator inset />
+            <q-separator inset />
 
-          <q-card-actions align="right">
-            <q-btn @click="endRoundState = false">Zrušit</q-btn>
-            <q-btn class="bg-black text-white" @click="winRound(0)">remíza</q-btn>
-            <q-btn class="bg-blue text-white" @click="winRound(1)">{{ state.round.player1 }}</q-btn>
-            <q-btn class="bg-orange text-white" @click="winRound(2)">{{ state.round.player2 }}</q-btn>
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+            <q-card-actions align="right">
+              <q-btn @click="endRoundState = false">Zrušit</q-btn>
+              <q-btn class="bg-black text-white" @click="winRound(0)">remíza</q-btn>
+              <q-btn class="bg-blue text-white" @click="winRound(1)">{{ state.round.player1 }}</q-btn>
+              <q-btn class="bg-orange text-white" @click="winRound(2)">{{ state.round.player2 }}</q-btn>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+      </template>
     </template>
 
     <q-inner-loading :showing="loading.state || loading.start || loading.pause || loading.reset ">
@@ -250,11 +276,13 @@ import ClipboardJS from 'clipboard'
 import getQuestionDisabledState from '../../helpers/get-question-disabled-state'
 import getQuestionButtonColor from '../../helpers/get-question-button-color'
 import SelectRandomWinner from '../../components/SelectRandomWinner'
+import RoundsForm from '../../components/RoundsForm'
 
 export default {
   name: 'PagePanelModerator',
   components: {
-    SelectRandomWinner
+    SelectRandomWinner,
+    RoundsForm
   },
   data () {
     return {
@@ -277,10 +305,16 @@ export default {
       roundTimer: 0,
       roundInterval: null,
       randomizeWinner: false,
-      randomizedWinnerIs: -1
+      randomizedWinnerIs: -1,
+      showRoundForm: false
     }
   },
   computed: {
+    usedQuestions () {
+      return this.state.round.questions.filter(q => {
+        return q.used === true
+      })
+    },
     activeQuestion () {
       try {
         const founded = this.state.round.questions.find(q => q.active)
@@ -309,6 +343,10 @@ export default {
       if (val) {
         this.roundTimer = val.timer * 1
       }
+    },
+    '$route.params.round' () {
+      this.showRoundForm = false
+      this.reserveQuestions(this.fetch)
     }
   },
   created () {
@@ -376,10 +414,8 @@ export default {
           if (response && response.data) {
             this.state = response.data
           } else {
-            // go for 404
-            this.$router.replace({
-              name: 'game.404'
-            })
+            // no round, so create a first one
+            this.showRoundForm = true
           }
         })
       } catch (error) {
@@ -391,6 +427,16 @@ export default {
           console.error(error)
         }
       }
+    },
+
+    roundFormCreate (round) {
+      return this.$router.replace({
+        name: 'panel.moderator',
+        params: {
+          id: this.$route.params.id,
+          round: round.id
+        }
+      })
     },
 
     selectQuestion (question, index) {

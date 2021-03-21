@@ -6,10 +6,10 @@
 
     <div class="q-mb-md" v-if="this.items.length">
       <q-btn
-        icon="add"
+        icon="img:/logo/app.svg"
         color="secondary"
-        :to="{ name: 'panel.rounds.new', params: { id: $route.params.id } }"
-      >přidat další kolo</q-btn>
+        :to="{ name: 'panel.moderator', params: { id: $route.params.id } }"
+      >nová hra</q-btn>
     </div>
 
     <div v-if="!hasEnoughQuestions && !loading.questions" class="q-mb-md text-red">
@@ -30,13 +30,6 @@
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td name="options" auto-width class="q-gutter-xs">
-              <q-btn
-                round
-                dense
-                size="sm"
-                icon="edit"
-                :to="{ name: 'panel.rounds.edit', params: { id: $route.params.id, round: props.row.id } }"
-              />
               <q-btn
                 round
                 dense
@@ -62,8 +55,23 @@
                     detail
                   </template>
                   <template v-else>
-                    hrát
+                    <template v-if="props.row.running">
+                      pokračovat
+                    </template>
+                    <template v-else>
+                      hrát
+                    </template>
                   </template>
+                </q-btn>
+
+                <q-btn
+                  v-if="props.row.questions.length"
+                  size="sm"
+                  outline
+                  :icon-right="props.expand ? 'arrow_drop_up' : 'arrow_drop_down'"
+                  @click="props.expand = !props.expand"
+                >
+                  otázky
                 </q-btn>
               </div>
             </q-td>
@@ -73,6 +81,17 @@
               <br>
               {{ props.row.player2 }}
               <q-icon name="star" v-if="props.row.winner === 2" color="orange" />
+            </q-td>
+          </q-tr>
+          <q-tr v-show="props.expand" :props="props">
+            <q-td colspan="100%">
+              <div class="text-left">
+                <ul style="overflow: scroll">
+                  <li v-for="q in props.row.questions" :key="q.id">
+                    {{ q.title }}
+                  </li>
+                </ul>
+              </div>
             </q-td>
           </q-tr>
         </template>
@@ -89,9 +108,9 @@
       <template v-slot:action>
         <q-btn
           flat
-          icon="add"
+          icon="img:/logo/app.svg"
           color="secondary"
-          :to="{ name: 'panel.rounds.new', params: { id: $route.params.id } }"
+          :to="{ name: 'panel.moderator' }"
         >přidat nové kolo</q-btn>
       </template>
     </q-banner>
