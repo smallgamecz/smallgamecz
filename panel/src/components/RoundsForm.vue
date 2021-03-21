@@ -42,7 +42,7 @@
           <div class="row justify-center text-center">
             <div class="col-8">
               <div class="row q-col-gutter-md">
-                <div class="col-sm-12">
+                <div class="col-xs-12">
                   <q-select
                     v-model="form.type"
                     :options="roundTypes"
@@ -51,7 +51,7 @@
                     map-options
                   />
                 </div>
-                <div class="col-sm-12">
+                <div class="col-xs-12">
                   <q-img
                     :src="getImageForRound"
                     style="max-width: 20em"
@@ -61,7 +61,7 @@
             </div>
           </div>
 
-          <q-stepper-navigation class="q-gutter-sm text-right">
+          <q-stepper-navigation class="q-gutter-sm text-center">
             <q-separator spaced />
             <q-btn outline @click="() => { step = 2 }" color="primary" label="kdo bude hrát?" icon-right="arrow_right" />
           </q-stepper-navigation>
@@ -115,12 +115,20 @@
           <q-stepper-navigation class="q-gutter-sm">
             <q-separator spaced />
 
-            <div class="row">
-              <div class="col">
-                <q-btn outline @click="() => { step = 1 }" color="primary" label="upravit typ hry" icon="arrow_left" />
-              </div>
-              <div class="col text-right">
+            <div class="row q-col-gutter-md justify-center">
+              <div class="col-xs-12 col-sm-4">
                 <q-btn
+                  class="full-width"
+                  outline
+                  @click="() => { step = 1 }"
+                  color="primary"
+                  label="změnit typ hry"
+                  icon="arrow_left"
+                />
+              </div>
+              <div class="col-xs-12 col-sm-4 text-right">
+                <q-btn
+                  class="full-width"
                   color="secondary"
                   icon="check"
                   label="uložit & hrát"
