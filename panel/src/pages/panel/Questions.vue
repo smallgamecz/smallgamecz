@@ -5,7 +5,7 @@
         color="accent"
         icon="get_app"
         :to="{ name: 'panel.questions.import', params: { id: $route.params.id } }"
-      >přidat hromadně</q-btn>
+      >přidat z katalogu</q-btn>
     </div>
 
     <h1 class="text-h4 q-ma-none q-mb-md">

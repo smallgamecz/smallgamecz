@@ -35,10 +35,10 @@
           </div>
           <div class="col-12 text-center q-mt-xl">
             <q-btn
-              icon="follow_the_signs"
+              icon="login"
               size="5em"
               round
-              color="primary"
+              color="accent"
               @click="enterGame"
             >
               <q-tooltip>vstoupit do hry</q-tooltip>

@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <template v-if="!loading.data">
+    <template v-if="!loading.data && !loading.questions">
       <q-banner v-if="!enoughQuestion" class="bg-red text-white q-ma-md">
         <template v-slot:avatar>
           <q-icon name="error" />
