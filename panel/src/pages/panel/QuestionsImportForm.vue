@@ -75,12 +75,26 @@ export default {
       url: ''
     }
   },
+  created () {
+    this.$store.dispatch('stats/event', {
+      client: this.$sailsIo,
+      event: 'questions.import.view'
+    })
+  },
   methods: {
     async onSubmit () {
       await this.importFromUrl(this.url)
     },
 
     async importFromUrl (url) {
+      this.$store.dispatch('stats/event', {
+        client: this.$sailsIo,
+        event: 'questions.import.url',
+        data: {
+          url: url
+        }
+      })
+
       try {
         this.loading.import = true
         this.$sailsIo.socket.post(`/v1/game/${this.$route.params.id}/import`, {

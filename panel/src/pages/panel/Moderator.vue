@@ -505,6 +505,14 @@ export default {
     },
 
     startRound () {
+      this.$store.dispatch('stats/event', {
+        client: this.$sailsIo,
+        event: 'round.start',
+        data: {
+          type: this.state.round.type.key
+        }
+      })
+
       this.loading.start = true
 
       try {
@@ -520,6 +528,14 @@ export default {
     },
 
     pauseRound () {
+      this.$store.dispatch('stats/event', {
+        client: this.$sailsIo,
+        event: 'round.pause',
+        data: {
+          type: this.state.round.type.key
+        }
+      })
+
       this.loading.pause = true
 
       try {
@@ -541,6 +557,14 @@ export default {
         return false
       }
 
+      this.$store.dispatch('stats/event', {
+        client: this.$sailsIo,
+        event: 'round.reset',
+        data: {
+          type: this.state.round.type.key
+        }
+      })
+
       this.loading.reset = true
 
       try {
@@ -557,6 +581,14 @@ export default {
 
     endRound () {
       this.endRoundState = true
+
+      this.$store.dispatch('stats/event', {
+        client: this.$sailsIo,
+        event: 'round.end',
+        data: {
+          type: this.state.round.type.key
+        }
+      })
     },
 
     updatePlayerResult (result) {

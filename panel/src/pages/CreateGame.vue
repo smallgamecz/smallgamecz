@@ -78,6 +78,15 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('stats/event', {
+      client: this.$sailsIo,
+      event: 'game.create',
+      data: {
+        action: 'catalogue.view',
+        game: this.game && this.game.url && this.game.url.length > 0
+      }
+    })
+
     this.$sailsIo.socket.get('/v1/game/data', {
       repository: repository.repository
     }, response => {
@@ -97,6 +106,15 @@ export default {
         if (source) {
           params.source = source
         }
+
+        this.$store.dispatch('stats/event', {
+          client: this.$sailsIo,
+          event: 'game.create',
+          data: {
+            action: 'catalogue.import',
+            source: params.source || ''
+          }
+        })
 
         this.$sailsIo.socket.post('/v1/game', params, response => {
           this.loading.import = false

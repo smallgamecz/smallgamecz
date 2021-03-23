@@ -229,6 +229,11 @@ export default {
   created () {
     this.fetchRoundTypes()
     this.fetchFreeQuestions()
+
+    this.$store.dispatch('stats/event', {
+      client: this.$sailsIo,
+      event: 'round.form'
+    })
   },
   methods: {
     fetchFreeQuestions () {
@@ -294,6 +299,14 @@ export default {
       }
 
       const form = JSON.parse(JSON.stringify(this.form))
+
+      this.$store.dispatch('stats/event', {
+        client: this.$sailsIo,
+        event: 'round.create',
+        data: {
+          key: this.getSelectedRoundType.key
+        }
+      })
 
       try {
         this.loading.data = true

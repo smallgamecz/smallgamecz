@@ -5,6 +5,7 @@ import VuexPersistence from 'vuex-persist'
 import config from './config'
 import auth from './auth'
 import round from './round'
+import stats from './stats'
 
 Vue.use(Vuex)
 
@@ -26,7 +27,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       config,
       auth,
-      round
+      round,
+      stats
     },
     plugins: [
       vuexLocal.plugin

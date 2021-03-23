@@ -26,6 +26,15 @@
 <script>
 
 export default {
-  name: 'HomepageComponent'
+  name: 'HomepageComponent',
+  created () {
+    this.$store.dispatch('stats/event', {
+      client: this.$sailsIo,
+      event: 'visit',
+      data: {
+        category: 'homepage'
+      }
+    })
+  }
 }
 </script>
