@@ -6,7 +6,11 @@
 
     <h2 class="q-ma-none q-mb-md text-h4">Cíl hry</h2>
 
-    <p>Pomocí správných odpovědí propojit jednotlivé strany obrazce, například trojúhelníku.</p>
+    <p>
+      Pomocí správných odpovědí propojit jednotlivé strany obrazce, například trojúhelníku.
+      <br>
+      Jakým způsobem, to záleží na tom, jak se hráči dohodnou. U čtverce se mohou rozhodnout spojit pouze tři strany nebo taky všechny čtyři.
+    </p>
 
     <h2 class="q-ma-none q-mb-md text-h4">Typy hry</h2>
 

@@ -13,6 +13,11 @@ module.exports.round = {
       name: 'trojúhelník, 15 políček',
       questions: 15,
       break: [1, 3, 6, 10]
+    },
+    square25: {
+      name: 'čtverec, 25 políček',
+      questions: 25,
+      break: [5, 10, 15, 20]
     }
   }
 }

@@ -77,6 +77,7 @@
             </q-btn-group>
           </div>
         </div>
+
         <div class="row q-mt-md q-mb-md" v-if="state.round.winner === -1">
           <div class="col-12">
             <q-btn-group>
@@ -99,6 +100,7 @@
             </q-btn-group>
           </div>
         </div>
+
         <div class="row q-col-gutter-lg">
           <div class="col-xs-12 col-md-4">
             <div class="row q-col-gutter-md">
@@ -210,6 +212,18 @@
                 >
               </div>
             </div>
+          </div>
+        </div>
+
+        <div v-if="state.round.winner > -1" class="row q-col-gutter-sm">
+          <div class="col-12">
+            <h4 class="text-h5 q-ma-none q-mt-md">Typ hry</h4>
+          </div>
+          <div class="col-12">
+            <q-img
+              :src="getImageForRound"
+              style="max-width: 20em"
+            />
           </div>
         </div>
 
@@ -333,6 +347,18 @@ export default {
     },
     socialLink () {
       return `${window.location.origin}/${this.$router.resolve({ name: 'panel.player', params: { id: this.$route.params.id, round: this.state.round.id } }).href}`
+    },
+    getImageForRound () {
+      try {
+        const key = this.state.round.type.key
+        return require(`../../assets/round/${key}.png`)
+      } catch (error) {
+        if (error) {
+          // do nothing
+        }
+      }
+
+      return ''
     }
   },
   watch: {
