@@ -17,6 +17,9 @@ module.exports = {
     questions: {
       type: 'number',
       required: true
+    },
+    break: {
+      type: 'ref'
     }
   }
 }

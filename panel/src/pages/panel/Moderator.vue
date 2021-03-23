@@ -206,7 +206,7 @@
                   {{ ++index }}
                 </q-btn>
                 <br
-                  v-if="[1, 3, 6, 10, 15, 21].indexOf(index) > -1"
+                  v-if="state.round.type.break.map(i => i * 1).indexOf(index) > -1"
                 >
               </div>
             </div>

@@ -6,11 +6,13 @@ module.exports.round = {
   type: {
     triangle28: {
       name: 'trojúhelník, 28 políček',
-      questions: 28
+      questions: 28,
+      break: [1, 3, 6, 10, 15, 21]
     },
     triangle15: {
       name: 'trojúhelník, 15 políček',
-      questions: 15
+      questions: 15,
+      break: [1, 3, 6, 10]
     }
   }
 }

@@ -31,7 +31,7 @@ module.exports = {
       const round = await Round.findOne({
         id,
         game
-      }).populate('questions')
+      }).populate('questions').populate('type')
 
       if (!round) {
         return exits.notFound()
