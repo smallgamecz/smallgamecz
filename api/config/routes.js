@@ -42,6 +42,7 @@ const routes = {
   },
   'POST /v1/game': 'v1/game/create',
   'GET /v1/game/data': 'v1/game/data',
+  'GET /v1/game/by-user-id/:id': 'v1/game/by-user-id',
   'POST /v1/game/:id/backup': 'v1/game/backup',
   'POST /v1/game/:id/restore': 'v1/game/restore',
   'POST /v1/game/:id/import': 'v1/game/import',

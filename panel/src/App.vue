@@ -4,6 +4,8 @@
   </div>
 </template>
 <script>
+require('animate.css')
+
 export default {
   name: 'App',
   data () {

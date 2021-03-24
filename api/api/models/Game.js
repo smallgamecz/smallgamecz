@@ -14,6 +14,9 @@ module.exports = {
       type: 'string',
       defaultsTo: ''
     },
+    userId: {
+      type: 'string' // simulate "login"
+    },
     rounds: {
       collection: 'round',
       via: 'game'
