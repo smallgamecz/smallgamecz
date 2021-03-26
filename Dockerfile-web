@@ -1,0 +1,7 @@
+FROM ghcr.io/danielrataj/smallgamecz/httpd-2.4.46-alpine:2.4.46-alpine
+LABEL MAINTAINER="Daniel Rataj <daniel.rataj@centrum.cz>"
+
+# copy source code to WORKDIR
+COPY web/ /usr/local/apache2/htdocs/
+
+EXPOSE 80

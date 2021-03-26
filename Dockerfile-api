@@ -1,0 +1,24 @@
+FROM ghcr.io/danielrataj/smallgamecz/node15110:15.11.0-alpine3.13
+LABEL MAINTAINER="Daniel Rataj <daniel.rataj@centrum.cz>"
+
+RUN apk add --no-cache openssl=1.1.1k-r0 \
+  && rm -rf /var/cache/apk/*
+
+WORKDIR /app
+
+COPY api/package.json .
+RUN npm install --quiet
+
+# copy required app files
+COPY api/api ./api
+COPY api/config/ ./config
+COPY api/static/ ./static
+COPY api/test/ ./test
+COPY api/app.js ./app.js
+COPY api/.sailsrc ./.sailsrc
+
+# start Sails app
+CMD [ "npm", "start" ]
+
+# expose port for Node
+EXPOSE 1337

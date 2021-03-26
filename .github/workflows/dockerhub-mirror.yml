@@ -1,0 +1,55 @@
+name: dockerhub-mirror
+
+on: workflow_dispatch
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log into registry
+        run: echo "${{ secrets.CR_PAT_SMALLGAME }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Node 15.11.0
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/node15110
+          VERSION=15.11.0-alpine3.13
+          PULL_IMAGE=node:$VERSION
+
+          docker pull "$PULL_IMAGE"
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag "$PULL_IMAGE" "${IMAGE_ID}:${VERSION}"
+          docker push "${IMAGE_ID}:${VERSION}"
+
+      - name: Push Node 14.6.0
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/node14160
+          VERSION=14.16.0-alpine3.13
+          PULL_IMAGE=node:$VERSION
+
+          docker pull "$PULL_IMAGE"
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag "$PULL_IMAGE" "${IMAGE_ID}:${VERSION}"
+          docker push "${IMAGE_ID}:${VERSION}"
+
+      - name: Push httpd 2.4.46-alpine
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/httpd-2.4.46-alpine
+          VERSION=2.4.46-alpine
+          PULL_IMAGE=httpd:$VERSION
+
+          docker pull "$PULL_IMAGE"
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag "$PULL_IMAGE" "${IMAGE_ID}:${VERSION}"
+          docker push "${IMAGE_ID}:${VERSION}"

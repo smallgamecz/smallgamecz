@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    restart: always
+    ports:
+      - "1337:1337"
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    command: npm run dev
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    environment:
+      NODE_ENV: development
+      CONFIG_CORS_ALLOW_ORIGINS: '*'
+      APP_PASSWORD: $SOME_SECRET_PASSWORD
+      MONGO_CONNECTION: mongodb://$NAME:$PASSWORD@mongo:27017/smallgame?authSource=smallgame
+      APP_DATA_ENCRYPTION_KEY: $BASE_64_ENCODING_44_CHARACTERS
+      APP_TOKEN: $64_CHARS
+      SOCKETS_ALLOW_ORIGINS: http://localhost:8080
+      GITHUB_SMALLGAME_USER: github_account
+      GITHUB_SMALLGAME_PASSWORD: github_token
+      GITHUB_SMALLGAME_ORG: github_organization
+      GITHUB_SMALLGAME_REPOSITORY: github_repository
+    depends_on:
+      - mongodb
+    networks:
+      - smallgame-tier
+
+  mongodb:
+    container_name: mongo
+    image: docker.io/bitnami/mongodb:4.4.4-debian-10-r5
+    ports:
+      - "27017:27017"
+    volumes:
+      - smallgame_mongodb_data:/bitnami
+    environment:
+      MONGODB_ROOT_PASSWORD: $ROOT_PASSWORD
+      MONGODB_DATABASE: smallgame
+      MONGODB_USERNAME: $USERNAME
+      MONGODB_PASSWORD: $PASSWORD
+    networks:
+      - smallgame-tier
+
+volumes:
+  smallgame_mongodb_data:
+    driver: local
+
+networks:
+  smallgame-tier:
+    external:
+      name: smallgame-tier
