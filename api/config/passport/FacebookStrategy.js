@@ -27,6 +27,8 @@ var verifyHandler = function (req, token, tokenSecret, profile, done) {
   });
 };
 
+console.log(`${process.env.API_URL}/v1/auth/facebook/callback`)
+
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
