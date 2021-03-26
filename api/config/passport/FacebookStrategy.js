@@ -1,5 +1,3 @@
-'use strict';
-
 var passport = require('passport'),
   FacebookStrategy = require('passport-facebook').Strategy,
   request = require('request');
@@ -32,6 +30,6 @@ var verifyHandler = function (req, token, tokenSecret, profile, done) {
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: '/v1/auth/facebook/callback',
+  callbackURL: `${process.env.API_URL}/v1/auth/facebook/callback`,
   passReqToCallback: true
 }, verifyHandler));
