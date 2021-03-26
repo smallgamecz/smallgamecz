@@ -20,7 +20,11 @@
     "sails-hook-sockets": "^2.0.0",
     "node-cron": "^3.0.0",
     "node-cache": "^5.1.2",
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "passport": "^0.4.1",
+    "passport-linkedin-oauth2": "^2.0.0",
+    "passport-facebook": "^3.0.0",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@sailshq/eslint": "^4.19.3",

@@ -31,6 +31,9 @@ module.exports.http = {
     *                                                                          *
     ***************************************************************************/
 
+     passportInit: require('passport').initialize(),
+     passportSession: require('passport').session(),
+
     // order: [
     //   'cookieParser',
     //   'session',
@@ -44,6 +47,8 @@ module.exports.http = {
 
     order: [
       'cookieParser',
+      'passportInit',
+      'passportSession',
       'bodyParser',
       'compress',
       'poweredBy',

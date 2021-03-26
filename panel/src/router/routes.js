@@ -86,6 +86,13 @@ const routes = [
     meta: { auth: false }
   },
 
+  {
+    path: '/facebook-auth-error',
+    component: () => import('pages/ErrorFacebook401.vue'),
+    name: 'facebook.401',
+    meta: { auth: false }
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

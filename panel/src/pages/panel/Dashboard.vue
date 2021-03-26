@@ -48,20 +48,24 @@
           </q-card>
         </router-link>
       </div>
-      <div class="col-12">
+      <div class="col-12" v-if="!loading">
         <h6 class="text-h6 q-mb-md">Průvodce</h6>
 
         <p>Jen několik kroků vás dělí od začátku hry.</p>
 
         <q-list bordered separator>
-          <q-item clickable v-ripple :to="{ name: 'panel.questions.new' }">
+          <q-item>
             <q-item-section avatar>
               <q-avatar color="secondary" text-color="white">1</q-avatar>
             </q-item-section>
 
             <q-item-section>
               <q-item-label overline>Kvízové otázky</q-item-label>
-              <q-item-label>Čím více otázek budete mít, tím více kol můžete hrát.</q-item-label>
+              <q-item-label>
+                Čím více otázek máte, tím více soutěžních kol můžete hrát.
+                <br>
+                Můžete je buď <router-link :to="{ name: 'panel.questions.new', params: { id: $route.params.id } }">sami vytvořit</router-link> nebo je nahrát <router-link :to="{ name: 'panel.questions.import', params: { id: $route.params.id } }">z naší encyklopedie</router-link>.
+              </q-item-label>
             </q-item-section>
           </q-item>
 
@@ -86,49 +90,30 @@ export default {
   name: 'PageDashboardIndex',
   data () {
     return {
-      game: null,
-      countOfQuestions: 0,
-      assistant: null
+      loading: false,
+      game: null
     }
   },
   created () {
     this.fetch()
-    this.fetchAssistant()
   },
   computed: {
     getUrl () {
       return `${window.location.origin}/#/panel/verify?game=${this.game.url}`
-    },
-    hasQuestions () {
-      return this.countOfQuestions > 0
     }
   },
   methods: {
     fetch () {
       try {
-        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}?populate=false`, response => {
-          this.game = response
-        })
-      } catch (error) {
-        if (error) {
-          console.error(error)
-        }
-      }
-    },
-
-    fetchAssistant () {
-      try {
         this.loading = true
-        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}/assistant`, response => {
+        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}?populate=false`, response => {
           this.loading = false
-
-          if (response && typeof response.data === 'object') {
-            this.assistant = response.data
+          if (response) {
+            this.game = response
           }
         })
       } catch (error) {
         this.loading = false
-
         if (error) {
           console.error(error)
         }

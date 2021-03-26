@@ -37,6 +37,9 @@ const routes = {
   'GET /status': 'index',
   'GET /v1/status': 'index',
 
+  'GET /v1/auth/facebook': 'v1/auth/facebook',
+  'GET /v1/auth/facebook/callback': 'v1/auth/facebook-callback',
+
   'GET /v1/game': {
     response: 'notFound'
   },

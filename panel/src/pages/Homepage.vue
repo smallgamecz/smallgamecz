@@ -20,7 +20,7 @@
             outline
           />
         </div>
-        <div class="col-12" v-if="facebookAppId">
+        <div class="col-12">
           <div class="row">
             <div class="col-12">
               <q-btn
@@ -28,44 +28,28 @@
                 class="full-width"
                 color="primary"
                 outline
-                @click="showFacebook = !showFacebook"
-              />
-            </div>
-            <div class="col-12 q-pt-md" v-if="showFacebook">
-              <facebook-login
-                v-if="!gameUrl"
-                :appId="facebookAppId"
-                label="přihlášení přes Facebook"
-                logoutLabel="odhlásit z Facebooku"
-                @login="getUserData"
-                @get-initial-status="getUserData"
+                @click="loginVia('facebook')"
               />
             </div>
           </div>
         </div>
       </div>
     </div>
-    <success-login :show="showLoginSuccess" />
   </q-page>
 </template>
 
 <script>
-/* eslint-disable */
-import facebookLogin from 'facebook-login-vuejs'
-import SuccessLogin from '../components/SuccessLogin'
+const APP_API_URL = process.env.APP_API_URL
 
 export default {
   name: 'HomepageComponent',
-  components: {
-    facebookLogin,
-    SuccessLogin
-  },
   data () {
     return {
       showLoginSuccess: false,
       facebookAppId: '',
       gameUrl: '',
-      showFacebook: false
+      showFacebook: false,
+      APP_API_URL
     }
   },
   created () {
@@ -76,50 +60,13 @@ export default {
         category: 'homepage'
       }
     })
-
-    this.getFacebookAppId()
   },
   methods: {
-    getFacebookAppId () {
-      try {
-        this.$sailsIo.socket.get('/v1/configuration', {
-          name: 'facebook.appId',
-          select: 'value',
-          limit: 1
-        }, response => {
-          this.facebookAppId = response[0].value
-        })
-      } catch (error) {
-        if (error) {
-          console.error(error)
-        }
-      }
-    },
-    getUserData (data) {
-      try {
-        let userID = data.userID
-
-        if (!userID && data.authResponse) {
-          userID = data.authResponse.userID
-        }
-
-        if (!userID) {
-          return false
-        }
-
-        this.$sailsIo.socket.get(`/v1/game/by-user-id/${userID}`, response => {
-          if (response.data && response.data.game) {
-            this.showLoginSuccess = true
-            this.gameUrl = response.data.game
-            setTimeout(() => {
-              window.location.href = `${window.location.origin}/#/panel/verify?game=${this.gameUrl}`
-            }, 2000)
-          }
-        })
-      } catch (error) {
-        if (error) {
-          console.error(error)
-        }
+    loginVia (provider) {
+      switch (provider) {
+        case 'facebook':
+          window.location.href = `${this.APP_API_URL}/v1/auth/facebook`
+          break
       }
     }
   }
