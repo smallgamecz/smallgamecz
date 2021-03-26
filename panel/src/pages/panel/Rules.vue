@@ -12,17 +12,6 @@
       Jakým způsobem, to záleží na tom, jak se hráči dohodnou. U čtverce se mohou rozhodnout spojit pouze tři strany nebo taky všechny čtyři.
     </p>
 
-    <h2 class="q-ma-none q-mb-md text-h4">Typy hry</h2>
-
-    <ul>
-      <li>
-        trojúhelník, 28 políček
-      </li>
-      <li>
-        trojúhelník, 15 políček
-      </li>
-    </ul>
-
     <h2 class="q-ma-none q-mb-md text-h4">Průběh hry</h2>
 
     <p>
