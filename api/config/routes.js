@@ -40,6 +40,9 @@ const routes = {
   'GET /v1/auth/facebook': 'v1/auth/facebook',
   'GET /v1/auth/facebook/callback': 'v1/auth/facebook-callback',
 
+  'GET /v1/auth/linkedin': 'v1/auth/linkedin',
+  'GET /v1/auth/linkedin/callback': 'v1/auth/linkedin-callback',
+
   'GET /v1/game': {
     response: 'notFound'
   },

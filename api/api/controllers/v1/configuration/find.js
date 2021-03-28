@@ -7,12 +7,11 @@ module.exports = {
 
   inputs: {
     name: {
-      type: 'string',
-      required: true
+      type: 'string'
     },
     select: {
       type: 'string',
-      defaultsTo: 'value'
+      defaultsTo: 'name,value'
     },
     limit: {
       type: 'number',
@@ -29,11 +28,17 @@ module.exports = {
   fn: async function (inputs, exits) {
     try {
       const options = {
-        where: {
-          name: inputs.name
-        },
         select: inputs.select.split(','),
         limit: inputs.limit
+      }
+
+      if (inputs.name) {
+        options.where = {
+          name: inputs.name
+        }
+      } else {
+        // make sure limit is off because we need all records
+        delete options.limit
       }
 
       const items = await Configuration.find(options).decrypt()

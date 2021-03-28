@@ -37,8 +37,8 @@ module.exports.sockets = {
    *                                                                          *
    ***************************************************************************/
 
-  adapter: 'memory',
-
+  adapter: '@sailshq/socket.io-redis',
+  url: process.env.REDIS_CONNECTION_STRING,
   onlyAllowOrigins: process.env.SOCKETS_ALLOW_ORIGINS.split(','),
 
   /***************************************************************************

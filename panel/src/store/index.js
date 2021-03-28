@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 
-import config from './config'
+import configuration from './configuration'
 import auth from './auth'
 import round from './round'
 import stats from './stats'
@@ -25,7 +25,7 @@ const vuexLocal = new VuexPersistence({
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      config,
+      configuration,
       auth,
       round,
       stats

@@ -93,6 +93,13 @@ const routes = [
     meta: { auth: false }
   },
 
+  {
+    path: '/linkedin-auth-error',
+    component: () => import('pages/ErrorLinkedIn401.vue'),
+    name: 'linkedin.401',
+    meta: { auth: false }
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

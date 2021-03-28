@@ -2,7 +2,7 @@ const passport = require('passport')
 
 module.exports = {
 
-  friendlyName: 'Passport - Facebook callback.',
+  friendlyName: 'Passport - LinkedIn callback.',
 
   inputs: {
   },
@@ -14,14 +14,18 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    passport.authenticate('facebook', async (error, user) => {
+    passport.authenticate('linkedin', async (error, user) => {
       if (error) {
         sails.log.error(error)
-        return this.req.res.redirect(`${process.env.PANEL_URL}/#/facebook-auth-error`)
+        return exits.badRequest()
       }
 
+      console.log(user)
+
+      return exits.badRequest()
+
       if (!user) {
-        return this.req.res.redirect(`${process.env.PANEL_URL}/#/facebook-auth-error`)
+        return this.req.res.redirect(`${process.env.PANEL_URL}/#/linkedin-auth-error`)
       }
 
       const id = user.id.toString()

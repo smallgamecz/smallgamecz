@@ -47,6 +47,7 @@ module.exports.http = {
 
     order: [
       'cookieParser',
+      'session',
       'passportInit',
       'passportSession',
       'bodyParser',
