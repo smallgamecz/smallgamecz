@@ -17,7 +17,7 @@
         </div>
         <div class="col-12 text-left relative-position">
           <q-chip class="absolute-center bg-white">
-            nebo použijte
+            nebo vstupte přes
           </q-chip>
           <q-separator color="secondary" class="q-mt-md q-mb-md" />
         </div>
