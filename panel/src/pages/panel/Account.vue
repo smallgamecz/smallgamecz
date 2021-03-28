@@ -1,17 +1,29 @@
 <template>
   <q-page padding>
-    <p>
-      V případě, že chcete smazat veškerá nastavení této hry i hru samotnou, potvrďte své rozhodnutí tlačítkem níže.
-      <br>
-      Veškerá data smažeme a nebude již možné je nijak obnovit.
-    </p>
-    <p>
-      <q-btn
-        color="red"
-        label="potvrdit smazání této hry"
-        @click="confirmDelete"
-      />
-    </p>
+    <h2 class="q-mt-none text-h4">Účet</h2>
+
+    <q-card>
+      <q-card-section class="bg-red text-white">
+        <q-icon name="warning" size="md" />
+        Smazat účet
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        V případě, že chcete smazat veškerá nastavení této hry i hru samotnou, potvrďte své rozhodnutí tlačítkem níže.
+        <br>
+        Veškerá data smažeme a nebude již možné je nijak obnovit.
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-actions>
+        <q-btn
+          flat
+          label="potvrdit smazání této hry"
+          @click="confirmDelete"
+        />
+      </q-card-actions>
+    </q-card>
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="100px" color="primary" />
     </q-inner-loading>
@@ -20,7 +32,7 @@
 
 <script>
 export default {
-  name: 'PagesPanelDelete',
+  name: 'PagesPanelAccount',
   data () {
     return {
       loading: false

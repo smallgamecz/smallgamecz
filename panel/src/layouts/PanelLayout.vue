@@ -138,16 +138,16 @@
         <q-item
           clickable
           tag="a"
-          :to="{ name: 'panel.delete' }"
+          :to="{ name: 'panel.account' }"
         >
           <q-item-section
             avatar
           >
-            <q-icon color="red" name="delete" />
+            <q-icon name="person" />
           </q-item-section>
 
           <q-item-section>
-            <q-item-label class="text-red">Smazat účet</q-item-label>
+            <q-item-label>Účet</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>

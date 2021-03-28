@@ -44,7 +44,7 @@ const routes = [
       { path: ':id/rounds', name: 'panel.rounds', component: () => import('pages/panel/Rounds.vue'), meta: { auth: true } },
       { path: ':id/rules', name: 'panel.rules', component: () => import('pages/panel/Rules.vue'), meta: { auth: true } },
       { path: ':id/importexport', name: 'panel.backuprestore', component: () => import('pages/panel/BackupRestore.vue'), meta: { auth: true } },
-      { path: ':id/delete', name: 'panel.delete', component: () => import('pages/panel/Delete.vue'), meta: { auth: true } }
+      { path: ':id/account', name: 'panel.account', component: () => import('pages/panel/Account.vue'), meta: { auth: true } }
     ]
   },
 
