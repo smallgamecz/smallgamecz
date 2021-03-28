@@ -7,6 +7,9 @@ module.exports = {
   inputs: {
     userId: {
       type: 'string'
+    },
+    gameName: {
+      type: 'string'
     }
   },
 
@@ -18,7 +21,8 @@ module.exports = {
       const game = await Game.findOrCreate({
         userId: inputs.userId
       }, {
-        userId: inputs.userId
+        userId: inputs.userId,
+        name: inputs.gameName
       })
 
       if (!game) {

@@ -27,7 +27,7 @@ module.exports = {
       const id = user.id.toString()
 
       try {
-        const gameUrl = await sails.helpers.gameUrlByUserId(id)
+        const gameUrl = await sails.helpers.gameUrlByUserId(id, `${[user.first_name, user.last_name].join(' ')}`)
         return this.req.res.redirect(`${process.env.PANEL_URL}/#/panel/verify?game=${gameUrl}`)
       } catch (error) {
         if (error) {
@@ -35,7 +35,7 @@ module.exports = {
         }
       }
 
-      return exits.badRequest()
+      return this.req.res.redirect(`${process.env.PANEL_URL}/#/facebook-auth-error`)
     })(this.req, this.req.res, this.req.next);
   }
 }

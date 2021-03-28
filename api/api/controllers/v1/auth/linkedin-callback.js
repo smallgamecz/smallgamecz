@@ -17,12 +17,8 @@ module.exports = {
     passport.authenticate('linkedin', async (error, user) => {
       if (error) {
         sails.log.error(error)
-        return exits.badRequest()
+        return this.req.res.redirect(`${process.env.PANEL_URL}/#/linkedin-auth-error`)
       }
-
-      console.log(user)
-
-      return exits.badRequest()
 
       if (!user) {
         return this.req.res.redirect(`${process.env.PANEL_URL}/#/linkedin-auth-error`)
@@ -31,7 +27,7 @@ module.exports = {
       const id = user.id.toString()
 
       try {
-        const gameUrl = await sails.helpers.gameUrlByUserId(id)
+        const gameUrl = await sails.helpers.gameUrlByUserId(id, user.displayName)
         return this.req.res.redirect(`${process.env.PANEL_URL}/#/panel/verify?game=${gameUrl}`)
       } catch (error) {
         if (error) {
@@ -39,7 +35,7 @@ module.exports = {
         }
       }
 
-      return exits.badRequest()
+      return this.req.res.redirect(`${process.env.PANEL_URL}/#/linkedin-auth-error`)
     })(this.req, this.req.res, this.req.next);
   }
 }
