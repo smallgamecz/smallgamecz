@@ -1,4 +1,4 @@
  {
   "schemaVersion": 2,
-  "imageName": "ghcr.io/danielrataj/smallgamecz/web:1.0"
+  "imageName": "ghcr.io/smallgamecz/smallgamecz/web:1.0"
  }
