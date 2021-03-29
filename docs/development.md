@@ -19,6 +19,8 @@ Focus on variables started with dolar sign ($) and replace it with your own conf
 -   MONGODB_ROOT_PASSWORD
 -   MONGODB_USERNAME
 -   MONGODB_PASSWORD
+-   REDIS_PASSWORD
+-   SESSION_SECRET
 
 
 ## API
