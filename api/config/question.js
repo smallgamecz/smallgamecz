@@ -7,8 +7,8 @@ module.exports.question = {
       graphql: {
         url: 'https://api.github.com/graphql',
         query: `{
-          repository(owner: "${process.env.GITHUB_SMALLGAME_ORG}", name: "repository") {
-            object(expression: "master:${process.env.GITHUB_SMALLGAME_REPOSITORY}/index.json") {
+          repository(owner: "${process.env.GITHUB_SMALLGAME_ORG}", name: "${process.env.GITHUB_SMALLGAME_REPOSITORY}") {
+            object(expression: "master:data/index.json") {
               ... on Blob {
                 oid
               }
