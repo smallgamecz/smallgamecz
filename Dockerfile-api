@@ -1,4 +1,4 @@
-FROM ghcr.io/danielrataj/smallgamecz/node15110:15.11.0-alpine3.13
+FROM ghcr.io/smallgamecz/smallgamecz/node15110:15.11.0-alpine3.13
 LABEL MAINTAINER="Daniel Rataj <daniel.rataj@centrum.cz>"
 
 RUN apk add --no-cache openssl=1.1.1k-r0 \

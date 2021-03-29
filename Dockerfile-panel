@@ -1,4 +1,4 @@
-FROM ghcr.io/danielrataj/smallgamecz/node14160:14.16.0-alpine3.13
+FROM ghcr.io/smallgamecz/smallgamecz/node14160:14.16.0-alpine3.13
 LABEL MAINTAINER="Daniel Rataj <daniel.rataj@centrum.cz>"
 
 # set a working directory

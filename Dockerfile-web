@@ -1,4 +1,4 @@
-FROM ghcr.io/danielrataj/smallgamecz/httpd-2.4.46-alpine:2.4.46-alpine
+FROM ghcr.io/smallgamecz/smallgamecz/httpd-2.4.46-alpine:2.4.46-alpine
 LABEL MAINTAINER="Daniel Rataj <daniel.rataj@centrum.cz>"
 
 # copy source code to WORKDIR
