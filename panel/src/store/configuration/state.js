@@ -3,6 +3,7 @@ export default function () {
     API_TOKEN: '',
     APP_API_URL: '',
     'login.facebook': false,
-    'login.linkedin': false
+    'login.linkedin': false,
+    'login.twitter': false
   }
 }

@@ -43,6 +43,9 @@ const routes = {
   'GET /v1/auth/linkedin': 'v1/auth/linkedin',
   'GET /v1/auth/linkedin/callback': 'v1/auth/linkedin-callback',
 
+  'GET /v1/auth/twitter': 'v1/auth/twitter',
+  'GET /v1/auth/twitter/callback': 'v1/auth/twitter-callback',
+
   'GET /v1/game': {
     response: 'notFound'
   },

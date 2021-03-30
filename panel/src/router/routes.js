@@ -100,6 +100,13 @@ const routes = [
     meta: { auth: false }
   },
 
+  {
+    path: '/twitter-auth-error',
+    component: () => import('pages/ErrorTwitter401.vue'),
+    name: 'twitter.401',
+    meta: { auth: false }
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

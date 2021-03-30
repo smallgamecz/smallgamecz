@@ -29,6 +29,8 @@ services:
       FACEBOOK_APP_SECRET: client_secret
       LINKEDIN_KEY: client_id
       LINKEDIN_SECRET: client_secret
+      TWITTER_KEY: client_id
+      TWITTER_SECRET: client_secret
       PANEL_URL: http://localhost:8080
       API_URL: http://localhost:1337
       REDIS_CONNECTION_STRING: redis://:$REDIS_PASSWORD@redis:6379/0
