@@ -8,6 +8,10 @@ module.exports = {
     userId: {
       type: 'string'
     },
+    network: {
+      type: 'string',
+      required: true
+    },
     gameName: {
       type: 'string'
     }
@@ -19,10 +23,12 @@ module.exports = {
   fn: async function (inputs, exits) {
     try {
       const game = await Game.findOrCreate({
-        userId: inputs.userId
+        userId: inputs.userId,
+        network: inputs.network
       }, {
         userId: inputs.userId,
-        name: inputs.gameName
+        name: inputs.gameName,
+        network: inputs.network
       })
 
       if (!game) {

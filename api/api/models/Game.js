@@ -17,6 +17,9 @@ module.exports = {
     userId: {
       type: 'string' // simulate "login"
     },
+    network: {
+      type: 'string'
+    },
     rounds: {
       collection: 'round',
       via: 'game'

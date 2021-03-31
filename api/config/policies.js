@@ -35,7 +35,6 @@ module.exports.policies = {
   'v1/questioncatalogue/reindex': 'token',
   'v1/faker/generate': 'token',
   'v1/game/create': 'token',
-  'v1/game/by-user-id': 'token',
   'v1/game/backup': 'token',
   'v1/game/restore': 'token',
   'v1/game/import': 'token',

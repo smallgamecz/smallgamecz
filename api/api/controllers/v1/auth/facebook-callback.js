@@ -27,7 +27,7 @@ module.exports = {
       const id = user.id.toString()
 
       try {
-        const gameUrl = await sails.helpers.gameUrlByUserId(id, `${[user.first_name, user.last_name].join(' ')}`)
+        const gameUrl = await sails.helpers.gameUrlByUserId(id, 'facebook', `${[user.first_name, user.last_name].join(' ')}`)
         return this.req.res.redirect(`${process.env.PANEL_URL}/#/panel/verify?game=${gameUrl}`)
       } catch (error) {
         if (error) {

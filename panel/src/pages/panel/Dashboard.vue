@@ -6,7 +6,7 @@
           <a :href="getUrl">odkaz pro vstup do této sekce</a>
         </q-chip>
       </div>
-      <div class="col-xs-6 col-md-3">
+      <div class="col-xs-6 col-sm-4 col-md-3">
         <router-link :to="{ name: 'panel.moderator' }">
           <q-card>
             <q-img
@@ -20,7 +20,7 @@
           </q-card>
         </router-link>
       </div>
-      <div class="col-xs-6 col-md-3">
+      <div class="col-xs-6 col-sm-4 col-md-3">
         <router-link :to="{ name: 'panel.questions' }">
           <q-card>
             <q-img
@@ -34,7 +34,7 @@
           </q-card>
         </router-link>
       </div>
-      <div class="col-xs-6 col-md-3">
+      <div class="col-xs-6 col-sm-4 col-md-3">
         <router-link :to="{ name: 'panel.rules' }">
           <q-card>
             <q-img
@@ -48,7 +48,7 @@
           </q-card>
         </router-link>
       </div>
-      <div class="col-xs-6 col-md-3">
+      <div class="col-xs-6 col-sm-4 col-md-3">
         <router-link :to="{ name: 'panel.account' }">
           <q-card>
             <q-img
