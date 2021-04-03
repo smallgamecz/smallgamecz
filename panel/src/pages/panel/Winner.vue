@@ -50,6 +50,28 @@ export default {
 
       return color
     }
+  },
+  created () {
+    this.fetchRound()
+  },
+  methods: {
+    fetchRound () {
+      try {
+        this.$sailsIo.socket.get(`/v1/round/${this.$route.params.round}`, {
+          game: this.$route.params.id
+        }, (response) => {
+          if (!response) {
+            return this.$router.replace({
+              name: 'round.404'
+            })
+          }
+        })
+      } catch (error) {
+        if (error) {
+          console.error(error)
+        }
+      }
+    }
   }
 }
 </script>

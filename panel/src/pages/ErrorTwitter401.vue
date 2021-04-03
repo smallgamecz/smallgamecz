@@ -24,6 +24,6 @@
 
 <script>
 export default {
-  name: 'ErrorFacebook401'
+  name: 'ErrorTwitter401'
 }
 </script>

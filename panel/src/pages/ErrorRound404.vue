@@ -6,7 +6,7 @@
       </div>
 
       <div class="text-h2" style="opacity:.4">
-        Tato hra neexistuje.
+        Toto soutěžní kolo neexistuje.
       </div>
 
       <q-btn
@@ -24,6 +24,6 @@
 
 <script>
 export default {
-  name: 'ErrorGame404'
+  name: 'ErrorRound404'
 }
 </script>

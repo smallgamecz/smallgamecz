@@ -39,25 +39,17 @@
         >
           <h4 class="text-h5 q-ma-none q-mb-md text-center">Jaký typ hry chcete hrát?</h4>
 
-          <div class="row justify-center text-center">
-            <div class="col-8">
-              <div class="row q-col-gutter-md">
-                <div class="col-xs-12">
-                  <q-select
-                    v-model="form.type"
-                    :options="roundTypes"
-                    label="Typ hry"
-                    emit-value
-                    map-options
-                  />
-                </div>
-                <div class="col-xs-12">
-                  <q-img
-                    :src="getImageForRound"
-                    style="max-width: 20em"
-                  />
-                </div>
-              </div>
+          <div class="row q-col-gutter-md">
+            <div class="col-xs-12 col-sm-6 col-md-3" v-for="type in roundTypes" :key="type.id">
+              <q-card class="cursor-pointer" @click="selectRoundType(type)" :class="{ 'q-card-selected shadow-15' : type.id === selected.type }">
+                <q-img
+                  :src="getImageForRoundById(type.id)"
+                >
+                  <div class="absolute-bottom text-subtitle2">
+                    {{ type.label }}
+                  </div>
+                </q-img>
+              </q-card>
             </div>
           </div>
 
@@ -166,12 +158,19 @@ export default {
       },
       roundTypes: [],
       step: 1,
-      freeQuestions: []
+      freeQuestions: [],
+      selected: {
+        type: ''
+      }
     }
   },
   computed: {
     formIsValid () {
       if (!this.form.name.length) {
+        return false
+      }
+
+      if (!this.form.type.length) {
         return false
       }
 
@@ -280,6 +279,7 @@ export default {
               if (t.key === 'triangle28') {
                 if (!this.form.type) {
                   this.form.type = t.id
+                  this.selected.type = t.id
                 }
               }
             }
@@ -339,6 +339,28 @@ export default {
         this.$smallgame.negative({
           message: 'Nebylo možné přidat nové kolo. Zkuste to prosím znovu.'
         })
+      }
+    },
+    getImageForRoundById (id) {
+      try {
+        const key = this.roundTypes.find(r => r.id === id).key
+        return require(`../assets/round/${key}.png`)
+      } catch (error) {
+        if (error) {
+          // do nothing
+        }
+      }
+
+      return ''
+    },
+
+    selectRoundType (type) {
+      if (this.selected.type === type.id) {
+        this.selected.type = ''
+        this.form.type = ''
+      } else {
+        this.selected.type = type.id
+        this.form.type = type.id
       }
     }
   }

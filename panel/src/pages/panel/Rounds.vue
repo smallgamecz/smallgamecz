@@ -276,12 +276,20 @@ export default {
     },
 
     playButtonStateDisabled (round) {
+      if (!round.type) {
+        return true
+      }
+
+      if (!round.questions.length) {
+        return true
+      }
+
       // and has some amout of questions as the configured type
       if (round.questions.length === round.type.questions) {
         return false
       }
 
-      // round is not running but we do not have en enought questions
+      // round is not running but we do not have en enough questions
       if (!round.running && !this.hasEnoughQuestions) {
         return true
       }
