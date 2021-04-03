@@ -1,5 +1,3 @@
-const JSend = require('jsend')
-
 module.exports = {
 
   friendlyName: 'Import game data.',

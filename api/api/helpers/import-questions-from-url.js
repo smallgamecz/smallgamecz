@@ -21,14 +21,14 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-      const questions = _.map(sails.helpers.shuffleArray(await sails.helpers.remoteContent(inputs.url)), q => {
+      let questions = _.map(sails.helpers.shuffleArray(await sails.helpers.remoteContent(inputs.url)), q => {
         q.game = inputs.gameId
 
         return q
       })
 
       // take max 100 questions
-      // questions =  questions.slice(0, 100)
+      questions = questions.slice(0, 100)
 
       // we cannot use "createEach" because of possible duplicates
       for (const q of questions) {

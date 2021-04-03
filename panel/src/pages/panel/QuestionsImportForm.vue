@@ -7,15 +7,15 @@
     </div>
 
     <h2 class="text-h4 q-ma-none q-mb-md">
-      Import otázek
+      Otázky
     </h2>
 
     <q-tabs
         v-model="tab"
         align="left"
       >
-        <q-tab name="games" label="Hry" />
-        <q-tab name="url" label="URL" />
+        <q-tab name="games" label="z encyklopedie" />
+        <q-tab name="url" label="z URL" />
     </q-tabs>
     <q-separator />
     <q-tab-panels v-model="tab" animated>
@@ -29,21 +29,21 @@
       </q-tab-panel>
       <q-tab-panel name="url" class="q-gutter-md">
         <p>
-          Zadejte URL zdroje, ze kterého lze importovat otázky. Duplikované otázky budou ignorovány.
+          Můžete taky nahrát otázky z libovolné webové adresy. Duplikované otázky budou ignorovány.
         </p>
         <q-form @submit="onSubmit">
           <div class="row q-col-gutter-md">
             <div class="col-12">
               <q-input
                 v-model="url"
-                label="URL"
+                label="URL s otázkami"
                 placeholder="https://"
               />
             </div>
             <div class="col-12">
               <q-btn
                 type="submit"
-                label="importovat"
+                label="nahrát"
                 :disable="!url"
               />
             </div>

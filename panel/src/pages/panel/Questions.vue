@@ -1,24 +1,29 @@
 <template>
   <q-page padding>
-    <div class="float-right">
-      <q-btn
-        color="accent"
-        icon="get_app"
-        :to="{ name: 'panel.questions.import', params: { id: $route.params.id } }"
-      >přidat z encyklopedie</q-btn>
-    </div>
-
     <h1 class="text-h4 q-ma-none q-mb-md">
       Otázky
     </h1>
 
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 text-left">
+        <q-btn
+          v-if="this.items.length"
+          icon="add"
+          color="secondary"
+          :to="{ name: 'panel.questions.new', params: { id: $route.params.id } }"
+        >přidat další otázku</q-btn>
+      </div>
+      <div class="col-xs-12 col-sm-6 text-right">
+        <q-btn
+          color="accent"
+          icon="get_app"
+          :to="{ name: 'panel.questions.import', params: { id: $route.params.id } }"
+        >přidat z encyklopedie</q-btn>
+      </div>
+    </div>
+
     <div class="q-mb-md">
-      <q-btn
-        v-if="this.items.length"
-        icon="add"
-        color="secondary"
-        :to="{ name: 'panel.questions.new', params: { id: $route.params.id } }"
-      >přidat další otázku</q-btn>
+
     </div>
 
     <div v-if="this.items.length">
