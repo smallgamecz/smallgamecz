@@ -10,7 +10,7 @@ You can create an unlimited amount of games and questions yourself.
 
 ## Do you have an idea?
 
-We believe that any idea is great and worthy of [discussion](https://github.com/danielrataj/smallgamecz/discussions).
+We believe that any idea is great and worthy of [discussion](https://github.com/smallgamecz/smallgamecz/discussions).
 
 ## Local development
 
