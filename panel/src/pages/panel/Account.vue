@@ -119,7 +119,7 @@ export default {
       this.$store.commit('app/loading', true)
 
       try {
-        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}?populate=consents`, response => {
+        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}?populate=false`, response => {
           this.$store.commit('app/loading', false)
 
           if (typeof response === 'object') {
