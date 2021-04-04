@@ -48,6 +48,10 @@ module.exports = {
     timer: {
       type: 'number',
       defaultsTo: 0
+    },
+    fromEncyclopedy: {
+      type: 'boolean',
+      defaultsTo: false
     }
   },
 

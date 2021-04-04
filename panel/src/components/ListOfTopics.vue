@@ -36,9 +36,6 @@
         </div>
       </div>
     </div>
-    <q-inner-loading :showing="loading">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </q-page>
 </template>
 
@@ -55,24 +52,29 @@ export default {
   },
   data () {
     return {
-      loading: false,
       categories: [],
       API_URL
     }
   },
+  computed: {
+    loading () {
+      return this.$store.state.app.loading
+    }
+  },
   created () {
-    this.loading = true
-
     try {
+      this.$store.commit('app/loading', true)
+
       this.$sailsIo.socket.get('/v1/questioncatalogue?omit=image_base64,createdAt,updatedAt', response => {
-        this.loading = false
+        this.$store.commit('app/loading', false)
 
         if (typeof response === 'object' && response) {
           this.categories = response
         }
       })
     } catch (error) {
-      this.loading = false
+      this.$store.commit('app/loading', false)
+
       if (error) {
         console.error(error)
       }

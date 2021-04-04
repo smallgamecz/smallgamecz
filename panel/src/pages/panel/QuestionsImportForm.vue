@@ -15,7 +15,7 @@
         align="left"
       >
         <q-tab name="games" label="z encyklopedie" />
-        <q-tab name="url" label="z URL" />
+        <!-- <q-tab name="url" label="z URL" /> -->
     </q-tabs>
     <q-separator />
     <q-tab-panels v-model="tab" animated>
@@ -23,13 +23,16 @@
         <p>
           Připravili jsme pro vás sadu různých otázek, které můžete hned použít. Klikněte na kategorii a hned vám ji nahrajeme.
           <br>
-          Z každé kategorie importujeme vždy max. 100 otázek.
+          Importujeme vždy maximálně 100 otázek.
         </p>
         <list-of-topics @source="importFromUrl" />
       </q-tab-panel>
-      <q-tab-panel name="url" class="q-gutter-md">
+
+      <!-- <q-tab-panel name="url" class="q-gutter-md">
         <p>
           Můžete taky nahrát otázky z libovolné webové adresy. Duplikované otázky budou ignorovány.
+          <br>
+          Importujeme vždy maximálně 100 otázek.
         </p>
         <q-form @submit="onSubmit">
           <div class="row q-col-gutter-md">
@@ -49,12 +52,8 @@
             </div>
           </div>
         </q-form>
-      </q-tab-panel>
+      </q-tab-panel> -->
     </q-tab-panels>
-
-    <q-inner-loading :showing="loading.import">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </q-page>
 </template>
 
@@ -68,11 +67,13 @@ export default {
   },
   data () {
     return {
-      loading: {
-        import: false
-      },
       tab: 'games',
       url: ''
+    }
+  },
+  computed: {
+    loading () {
+      return this.$store.state.app.loading
     }
   },
   created () {
@@ -96,11 +97,13 @@ export default {
       })
 
       try {
-        this.loading.import = true
+        this.$store.commit('app/loading', true
+        )
         this.$sailsIo.socket.post(`/v1/game/${this.$route.params.id}/import`, {
-          url
+          url,
+          fromEncyclopedy: true
         }, response => {
-          this.loading.import = false
+          this.$store.commit('app/loading', false)
 
           if (!response || typeof response !== 'boolean') {
             this.$smallgame.negative({
@@ -114,7 +117,7 @@ export default {
           })
         })
       } catch (error) {
-        this.loading.import = false
+        this.$store.commit('app/loading', false)
 
         console.error(error)
         this.$smallgame.negative({

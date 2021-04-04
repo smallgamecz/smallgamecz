@@ -6,6 +6,7 @@ import configuration from './configuration'
 import auth from './auth'
 import round from './round'
 import stats from './stats'
+import app from './app'
 
 Vue.use(Vuex)
 
@@ -28,7 +29,8 @@ export default function (/* { ssrContext } */) {
       configuration,
       auth,
       round,
-      stats
+      stats,
+      app
     },
     plugins: [
       vuexLocal.plugin

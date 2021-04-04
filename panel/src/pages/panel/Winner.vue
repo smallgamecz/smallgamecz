@@ -20,6 +20,9 @@
 export default {
   name: 'PagePanelWinner',
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     winner () {
       return this.$route.query.winner * 1
     },
@@ -57,9 +60,12 @@ export default {
   methods: {
     fetchRound () {
       try {
+        this.$store.commit('app/loading', true)
+
         this.$sailsIo.socket.get(`/v1/round/${this.$route.params.round}`, {
           game: this.$route.params.id
         }, (response) => {
+          this.$store.commit('app/loading', false)
           if (!response) {
             return this.$router.replace({
               name: 'round.404'
@@ -67,6 +73,8 @@ export default {
           }
         })
       } catch (error) {
+        this.$store.commit('app/loading', false)
+
         if (error) {
           console.error(error)
         }

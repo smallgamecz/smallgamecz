@@ -11,6 +11,10 @@ module.exports = {
     url: {
       type: 'string',
       required: true
+    },
+    fromEncyclopedy: {
+      type: 'boolean',
+      defaultsTo: false
     }
   },
 
@@ -22,7 +26,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-      await sails.helpers.importQuestionsFromUrl(inputs.id, inputs.url)
+      await sails.helpers.importQuestionsFromUrl(inputs.id, inputs.url, 100, inputs.fromEncyclopedy)
 
       return exits.success(true)
     } catch (error) {

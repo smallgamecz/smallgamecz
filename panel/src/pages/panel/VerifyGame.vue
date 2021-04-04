@@ -1,22 +1,19 @@
 <template>
-  <q-page padding>
-    <q-inner-loading :showing="loading">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
-  </q-page>
+  <div></div>
 </template>
 
 <script>
-
 export default {
   name: 'PageVerifyGame',
   data () {
     return {
-      game: null,
-      loading: true
+      game: null
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     gameUrl () {
       return this.$route.query.game
     }
@@ -33,16 +30,16 @@ export default {
   methods: {
     verifyGame () {
       try {
-        this.loading = true
+        this.$store.commit('app/loading', true)
 
         this.$sailsIo.socket.get(`/v1/game/verify/${this.gameUrl}`, (response) => {
+          this.$store.commit('app/loading', false)
+
           if (!response) {
             return this.$router.replace({
               name: 'game.404'
             })
           }
-
-          this.loading = false
 
           this.game = response.data
 
@@ -54,7 +51,7 @@ export default {
           })
         })
       } catch (error) {
-        this.loading = false
+        this.$store.commit('app/loading', false)
 
         console.error(error)
 

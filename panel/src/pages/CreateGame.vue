@@ -5,9 +5,10 @@
         <template v-if="!game">
           <div class="row q-col-gutter-md">
             <div class="col-12">
-              <h1 class="text-h6">
-                Vyberte sadu otázek, se kterou chcete začít.
+              <h1 class="text-h6 q-mb-none">
+                Vyberte sadu otázek z naší encyklopedie.
               </h1>
+              <h2 class="text-subtitle2 q-mt-none">V jednom kroku nahrajeme vždy nejvýše 100 otázek.</h2>
             </div>
             <div class="col-12">
               <list-of-topics :showEmptyValue="true" @source="importFromUrl" />
@@ -47,9 +48,6 @@
         </div>
       </div>
     </div>
-    <q-inner-loading :showing="loading.import">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </q-page>
 </template>
 
@@ -64,15 +62,15 @@ export default {
   },
   data () {
     return {
-      loading: {
-        import: false
-      },
       game: null
     }
   },
   computed: {
     getUrl () {
       return `${window.location.origin}/#/panel/verify?game=${this.game.url}`
+    },
+    'loading.import' () {
+      return this.$store.state.app.loading
     }
   },
   created () {
@@ -92,7 +90,7 @@ export default {
   methods: {
     async importFromUrl (source) {
       try {
-        this.loading.import = true
+        this.$store.commit('app/loading', true)
         const params = {}
 
         if (source) {
@@ -109,7 +107,7 @@ export default {
         })
 
         this.$sailsIo.socket.post('/v1/game', params, response => {
-          this.loading.import = false
+          this.$store.commit('app/loading', false)
 
           if (!response || typeof response !== 'object') {
             this.$smallgame.negative({
@@ -121,7 +119,7 @@ export default {
           this.game = response
         })
       } catch (error) {
-        this.loading.import = false
+        this.$store.commit('app/loading', false)
 
         console.error(error)
         this.$smallgame.negative({

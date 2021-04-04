@@ -12,6 +12,14 @@ module.exports = {
     url: {
       type: 'string',
       required: true
+    },
+    limit: {
+      type: 'number',
+      defaultsTo: 100
+    },
+    fromEncyclopedy: {
+      type: 'boolean',
+      defaultsTo: false
     }
   },
 
@@ -28,10 +36,16 @@ module.exports = {
       })
 
       // take max 100 questions
-      questions = questions.slice(0, 100)
+      if (inputs.limit) {
+        questions = questions.slice(0, inputs.limit)
+      }
 
       // we cannot use "createEach" because of possible duplicates
       for (const q of questions) {
+        if (inputs.fromEncyclopedy) {
+          q.fromEncyclopedy = true
+        }
+
         await Question.create(q).tolerate('E_UNIQUE')
       }
 

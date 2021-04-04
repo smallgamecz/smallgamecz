@@ -1,67 +1,71 @@
 <template>
   <q-page padding>
-    <h2 class="q-mt-none text-h4">Účet</h2>
+    <div class="row q-col-gutter-md">
+      <div class="col-12">
+        <h2 class="q-mt-none q-mb-none text-h4">Účet</h2>
+      </div>
+      <div class="col-12">
+        <q-card v-if="socialAccountType">
+          <q-card-section class="bg-accent text-white">
+            <q-icon :name="getSocialIcon" size="md" />
+            Sociální sítě
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <p v-if="socialAccountType">
+              <template v-if="socialAccountType === 'twitter'">
+                S touto hrou máte propojený Twitter účet.
+              </template>
+              <template v-if="socialAccountType === 'facebook'">
+                S touto hrou máte propojený Facebook účet.
+              </template>
+              <template v-if="socialAccountType === 'linkedin'">
+                S touto hrou máte propojený LinkedIn účet.
+              </template>
 
-    <q-card v-if="socialAccountType" class="q-mb-md">
-      <q-card-section class="bg-accent text-white">
-        <q-icon :name="getSocialIcon" size="md" />
-        Sociální sítě
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <p v-if="socialAccountType">
-          <template v-if="socialAccountType === 'twitter'">
-            S touto hrou máte propojený Twitter účet.
-          </template>
-          <template v-if="socialAccountType === 'facebook'">
-            S touto hrou máte propojený Facebook účet.
-          </template>
-          <template v-if="socialAccountType === 'linkedin'">
-            S touto hrou máte propojený LinkedIn účet.
-          </template>
+              Propojení můžete zrušit, jenom pak ztratíte jednoduchou možnost se přihlásit.
+            </p>
+          </q-card-section>
 
-          Propojení můžete zrušit, jenom pak ztratíte jednoduchou možnost se přihlásit.
-        </p>
-      </q-card-section>
+          <q-separator />
 
-      <q-separator />
+          <q-card-actions>
+            <q-btn
+              color="red"
+              flat
+              label="zrušit propojení"
+              @click="cancelConnection"
+            />
+          </q-card-actions>
+        </q-card>
+      </div>
 
-      <q-card-actions>
-        <q-btn
-          color="red"
-          flat
-          label="zrušit propojení"
-          @click="cancelConnection"
-        />
-      </q-card-actions>
-    </q-card>
+      <div class="col-12">
+        <q-card>
+          <q-card-section class="bg-red text-white">
+            <q-icon name="warning" size="md" />
+            Smazat účet
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            V případě, že chcete smazat veškerá nastavení této hry i hru samotnou, potvrďte své rozhodnutí tlačítkem níže.
+            <br>
+            Veškerá data smažeme a nebude již možné je nijak obnovit.
+          </q-card-section>
 
-    <q-card>
-      <q-card-section class="bg-red text-white">
-        <q-icon name="warning" size="md" />
-        Smazat účet
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        V případě, že chcete smazat veškerá nastavení této hry i hru samotnou, potvrďte své rozhodnutí tlačítkem níže.
-        <br>
-        Veškerá data smažeme a nebude již možné je nijak obnovit.
-      </q-card-section>
+          <q-separator />
 
-      <q-separator />
-
-      <q-card-actions>
-        <q-btn
-          flat
-          label="potvrdit smazání této hry"
-          @click="confirmDelete"
-          color="red"
-        />
-      </q-card-actions>
-    </q-card>
-    <q-inner-loading :showing="loading">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
+          <q-card-actions>
+            <q-btn
+              flat
+              label="potvrdit smazání této hry"
+              @click="confirmDelete"
+              color="red"
+            />
+          </q-card-actions>
+        </q-card>
+      </div>
+    </div>
   </q-page>
 </template>
 
@@ -72,12 +76,14 @@ export default {
   name: 'PagesPanelAccount',
   data () {
     return {
-      loading: false,
       icons,
       game: null
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     socialAccountType () {
       if (!this.game) {
         return false
@@ -110,18 +116,18 @@ export default {
   },
   methods: {
     fetchGame () {
-      this.loading = true
+      this.$store.commit('app/loading', true)
 
       try {
-        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}?populate=false`, response => {
-          this.loading = false
+        this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}?populate=consents`, response => {
+          this.$store.commit('app/loading', false)
 
           if (typeof response === 'object') {
             this.game = response
           }
         })
       } catch (error) {
-        this.loading = false
+        this.$store.commit('app/loading', false)
 
         if (error) {
           console.error(error)
@@ -136,9 +142,10 @@ export default {
     },
     deleteAccount () {
       try {
-        this.loading = true
+        this.$store.commit('app/loading', true)
+
         this.$sailsIo.socket.delete(`/v1/game/${this.$route.params.id}`, response => {
-          this.loading = false
+          this.$store.commit('app/loading', false)
 
           this.$smallgame.positive({
             message: 'Hru jsme smazali. Díky a brzy si zase přijďte hrát :-)'
@@ -149,7 +156,7 @@ export default {
           })
         })
       } catch (error) {
-        this.loading = false
+        this.$store.commit('app/loading', false)
 
         if (error) {
           console.error(error)
@@ -159,13 +166,13 @@ export default {
 
     cancelConnection () {
       try {
-        this.loading = true
+        this.$store.commit('app/loading', true)
 
         this.$sailsIo.socket.patch(`/v1/game/${this.$route.params.id}`, {
           network: '',
           userId: ''
         }, response => {
-          this.loading = false
+          this.$store.commit('app/loading', false)
 
           this.game = response
 
@@ -174,7 +181,8 @@ export default {
           })
         })
       } catch (error) {
-        this.loading = false
+        this.$store.commit('app/loading', false)
+
         if (error) {
           console.error(error)
         }

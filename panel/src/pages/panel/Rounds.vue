@@ -12,7 +12,7 @@
       >nová hra</q-btn>
     </div>
 
-    <div v-if="!hasEnoughQuestions && !loading.questions" class="q-mb-md text-red">
+    <div v-if="!hasEnoughQuestions && !loading" class="q-mb-md text-red">
       Každé soutěžní kolo vyžaduje konkrétní množství otázek (podle typu soutěžního kola).
       Momentálně nemáte dostatek volných otázek, abyste mohli zahájit všechna kola.
       <br>
@@ -98,7 +98,7 @@
       </q-table>
     </div>
 
-    <q-banner class="bg-grey-3" v-if="!this.items.length && !loading.items">
+    <q-banner class="bg-grey-3" v-if="!this.items.length && !loading">
       <template v-slot:avatar>
         <q-icon name="face" color="primary" />
       </template>
@@ -114,10 +114,6 @@
         >začít nové kolo</q-btn>
       </template>
     </q-banner>
-
-    <q-inner-loading :showing="loading.items || loading.delete">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </q-page>
 </template>
 
@@ -127,11 +123,6 @@ export default {
   data () {
     return {
       items: [],
-      loading: {
-        items: false,
-        delete: false,
-        questions: false
-      },
       table: {
         columns: [
           {
@@ -158,6 +149,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     tableData () {
       return this.items.map(item => {
         return {
@@ -209,12 +203,12 @@ export default {
   },
   methods: {
     fetch () {
-      this.loading.items = true
+      this.$store.commit('app/loading', true)
 
       this.$sailsIo.socket.get('/v1/round', {
         game: this.$route.params.id
       }, (results = []) => {
-        this.loading.items = false
+        this.$store.commit('app/loading', false)
 
         if (results) {
           this.items = results
@@ -223,7 +217,8 @@ export default {
     },
 
     fetchQuestions () {
-      this.loading.questions = true
+      this.$store.commit('app/loading', true)
+
       try {
         const where = []
         where.game = this.$route.params.id
@@ -236,13 +231,15 @@ export default {
             round: 'null'
           }
         }, (response = {}) => {
-          this.loading.questions = false
+          this.$store.commit('app/loading', false)
+
           if (response && response.data) {
             this.questionsCount = response.data.length
           }
         })
       } catch (error) {
-        this.loading.questions = false
+        this.$store.commit('app/loading', false)
+
         console.error(error)
       }
     },
@@ -255,10 +252,10 @@ export default {
       }
 
       try {
-        this.loading.delete = true
+        this.$store.commit('app/loading', true)
 
         this.$sailsIo.socket.delete(`/v1/round/${item.id}`, _ => {
-          this.loading.delete = false
+          this.$store.commit('app/loading', false)
 
           this.fetch()
           this.fetchQuestions()

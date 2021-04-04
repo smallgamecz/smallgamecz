@@ -1,13 +1,19 @@
 <template>
   <div id="q-app">
     <router-view />
+    <app-loading />
   </div>
 </template>
+
 <script>
 require('animate.css')
+import AppLoading from './components/AppLoading'
 
 export default {
   name: 'App',
+  components: {
+    AppLoading
+  },
   data () {
     return {
       sockets: {
@@ -16,6 +22,8 @@ export default {
     }
   },
   created () {
+    this.$store.commit('app/loading', false) // make sure loading is false
+
     this.$store.commit('configuration/setApiUrl', process.env.APP_API_URL)
     this.$store.commit('configuration/setApiToken', process.env.API_TOKEN)
 

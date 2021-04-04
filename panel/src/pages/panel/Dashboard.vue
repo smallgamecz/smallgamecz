@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="row q-col-gutter-sm">
+    <div class="row q-col-gutter-sm" v-if="!loading">
       <div v-if="game" class="col-12">
         <q-chip icon="link">
           <a :href="getUrl">odkaz pro vstup do této sekce</a>
@@ -62,7 +62,7 @@
           </q-card>
         </router-link>
       </div>
-      <div class="col-12" v-if="!loading">
+      <div class="col-12">
         <h6 class="text-h6 q-mb-md">Průvodce</h6>
 
         <p>Jen několik kroků vás dělí od začátku hry.</p>
@@ -104,7 +104,6 @@ export default {
   name: 'PageDashboardIndex',
   data () {
     return {
-      loading: false,
       game: null
     }
   },
@@ -114,20 +113,25 @@ export default {
   computed: {
     getUrl () {
       return `${window.location.origin}/#/panel/verify?game=${this.game.url}`
+    },
+    loading () {
+      return this.$store.state.app.loading
     }
   },
   methods: {
     fetch () {
       try {
-        this.loading = true
+        this.$store.commit('app/loading', true)
+
         this.$sailsIo.socket.get(`/v1/game/${this.$route.params.id}?populate=false`, response => {
-          this.loading = false
+          this.$store.commit('app/loading', false)
           if (response) {
             this.game = response
           }
         })
       } catch (error) {
-        this.loading = false
+        this.$store.commit('app/loading', false)
+
         if (error) {
           console.error(error)
         }

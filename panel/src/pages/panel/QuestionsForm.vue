@@ -57,9 +57,6 @@
         <q-btn label="přerušit" type="reset" flat class="q-ml-sm" :to="{ name: 'panel.questions' }" />
       </div>
     </q-form>
-    <q-inner-loading :showing="loading.data">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </q-page>
 </template>
 
@@ -68,9 +65,6 @@ export default {
   name: 'PagesPanelQuestionsForm',
   data () {
     return {
-      loading: {
-        data: false
-      },
       form: {
         title: '',
         answer: '',
@@ -78,6 +72,11 @@ export default {
         game: '',
         round: null
       }
+    }
+  },
+  computed: {
+    loading () {
+      return this.$store.state.app.loading
     }
   },
   watch: {
@@ -94,11 +93,11 @@ export default {
   },
   methods: {
     async fetch () {
-      this.loading.data = true
+      this.$store.commit('app/loading', true)
 
       try {
         this.$sailsIo.socket.get(`/v1/question/${this.$route.params.question}`, (response = {}) => {
-          this.loading.data = false
+          this.$store.commit('app/loading', false)
 
           if (response.data) {
             for (const rKey in response.data) {
@@ -109,7 +108,7 @@ export default {
           }
         })
       } catch (error) {
-        this.loading.data = false
+        this.$store.commit('app/loading', false)
         console.error(error)
       }
     },
@@ -121,10 +120,10 @@ export default {
       form.game = this.$route.params.id
 
       try {
-        this.loading.data = true
+        this.$store.commit('app/loading', true)
 
         this.$sailsIo.socket[method]('/v1/question' + (this.$route.meta.edit ? `/${this.$route.params.question}` : ''), form, _ => {
-          this.loading.data = false
+          this.$store.commit('app/loading', false)
 
           this.$smallgame.positive({
             message: this.$route.meta.edit ? 'Právě jste otázku upravili.' : 'Právě jste přidali novou otázku.'
@@ -133,7 +132,7 @@ export default {
           this.$router.push({ name: 'panel.questions' })
         })
       } catch (error) {
-        this.loading.data = false
+        this.$store.commit('app/loading', false)
 
         console.error(error)
         this.$smallgame.negative({

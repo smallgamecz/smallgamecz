@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <player-sound-icon />
-    <template v-if="!loading.state">
+    <template v-if="!loading">
       <div class="row window-height items-center q-col-gutter-md text-center">
         <div class="col-12">
           <div
@@ -119,10 +119,6 @@
       </q-dialog>
     </template>
 
-    <q-inner-loading :showing="loading.state">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
-
     <select-random-winner :start="randomizeWinner" :stop-with-winner="randomizedWinnerIs" />
   </q-page>
 </template>
@@ -140,9 +136,6 @@ export default {
   },
   data () {
     return {
-      loading: {
-        state: false
-      },
       state: {
         questions: [],
         round: {
@@ -157,6 +150,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     activeQuestion () {
       try {
         return this.state.round.questions.find(q => q.active) || null
@@ -258,22 +254,22 @@ export default {
   methods: {
     fetch (verbose = true, cb = null) {
       if (verbose) {
-        this.loading.state = true
+        this.$store.commit('app/loading', true)
       }
 
       try {
         this.$sailsIo.socket.get(`/v1/round/${this.$route.params.round}/state`, {
           game: this.$route.params.id
         }, (response) => {
+          if (verbose) {
+            this.$store.commit('app/loading', false)
+          }
+
           if (!response) {
             // go for 404
             return this.$router.replace({
               name: 'game.404'
             })
-          }
-
-          if (verbose) {
-            this.loading.state = false
           }
 
           this.state = response.data
@@ -308,7 +304,7 @@ export default {
         })
       } catch (error) {
         if (verbose) {
-          this.loading.state = false
+          this.$store.commit('app/loading', false)
         }
 
         console.error(error)

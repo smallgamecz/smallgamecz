@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <template v-if="!loading.data && !loading.questions">
+    <template v-if="!loading">
       <q-banner v-if="!enoughQuestion" class="bg-red text-white q-ma-md">
         <template v-slot:avatar>
           <q-icon name="error" />
@@ -133,10 +133,6 @@
         </q-step>
       </q-stepper>
     </template>
-
-    <q-inner-loading :showing="loading.data">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </div>
 </template>
 
@@ -145,10 +141,6 @@ export default {
   name: 'RoundsFormComponent',
   data () {
     return {
-      loading: {
-        data: false,
-        questions: false
-      },
       form: {
         name: 'soutěž',
         player1: 'Hráč 1',
@@ -165,6 +157,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     formIsValid () {
       if (!this.form.name.length) {
         return false
@@ -236,7 +231,7 @@ export default {
   },
   methods: {
     fetchFreeQuestions () {
-      this.loading.questions = true
+      this.$store.commit('app/loading', true)
 
       try {
         const where = []
@@ -250,14 +245,14 @@ export default {
             round: 'null'
           }
         }, (response) => {
-          this.loading.questions = false
+          this.$store.commit('app/loading', false)
 
           if (response && typeof response === 'object') {
             this.freeQuestions = response.data
           }
         })
       } catch (error) {
-        this.loading.questions = false
+        this.$store.commit('app/loading', false)
         console.error(error)
       }
     },
@@ -309,14 +304,14 @@ export default {
       })
 
       try {
-        this.loading.data = true
+        this.$store.commit('app/loading', true)
 
         if (!form.game) {
           form.game = this.$route.params.id
         }
 
         this.$sailsIo.socket.post('/v1/round', form, response => {
-          this.loading.data = false
+          this.$store.commit('app/loading', false)
 
           if (!response) {
             this.$smallgame.negative({
@@ -333,7 +328,7 @@ export default {
           this.$emit('update', response)
         })
       } catch (error) {
-        this.loading.data = false
+        this.$store.commit('app/loading', false)
 
         console.error(error)
         this.$smallgame.negative({

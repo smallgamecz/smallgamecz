@@ -79,7 +79,7 @@
       </q-table>
     </div>
 
-    <q-banner class="bg-grey-3" v-if="!this.items.length && !loading.items">
+    <q-banner class="bg-grey-3" v-if="!this.items.length && !loading">
       <template v-slot:avatar>
         <q-icon name="question_answer" color="primary" />
       </template>
@@ -95,10 +95,6 @@
         >přidat novou otázku</q-btn>
       </template>
     </q-banner>
-
-    <q-inner-loading :showing="loading.items || loading.delete">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </q-page>
 </template>
 
@@ -108,10 +104,6 @@ export default {
   data () {
     return {
       items: [],
-      loading: {
-        items: false,
-        delete: false
-      },
       table: {
         columns: [
           {
@@ -150,6 +142,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     tableData () {
       return this.items.map(item => {
         return {
@@ -168,7 +163,7 @@ export default {
   },
   methods: {
     fetch () {
-      this.loading.items = true
+      this.$store.commit('app/loading', true)
 
       try {
         this.$sailsIo.socket.get('/v1/question', {
@@ -176,7 +171,8 @@ export default {
             game: this.$route.params.id
           }
         }, (results = {}) => {
-          this.loading.items = false
+          this.$store.commit('app/loading', false)
+
           if (results && results.data) {
             this.items = results.data
           } else {
@@ -184,6 +180,8 @@ export default {
           }
         })
       } catch (error) {
+        this.$store.commit('app/loading', false)
+
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné otázky nahrát. Zkuste to prosím znovu.'
@@ -199,10 +197,10 @@ export default {
       }
 
       try {
-        this.loading.delete = true
+        this.$store.commit('app/loading', true)
 
         this.$sailsIo.socket.delete(`/v1/question/${item.id}`, _ => {
-          this.loading.delete = false
+          this.$store.commit('app/loading', false)
 
           this.$smallgame.positive({
             message: `Smazali jste otázku "${item.title}".`
@@ -211,7 +209,7 @@ export default {
           this.fetch()
         })
       } catch (error) {
-        this.loading.delete = true
+        this.$store.commit('app/loading', false)
 
         console.error(error)
         this.$smallgame.positive({
@@ -230,9 +228,10 @@ export default {
       item.title = `${item.title} (kopie)`
 
       try {
-        this.loading.items = true
+        this.$store.commit('app/loading', true)
+
         this.$sailsIo.socket.post('/v1/question', item, (_) => {
-          this.loading.items = false
+          this.$store.commit('app/loading', false)
           this.fetch()
 
           this.$smallgame.positive({
@@ -240,6 +239,8 @@ export default {
           })
         })
       } catch (error) {
+        this.$store.commit('app/loading', false)
+
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné otázku duplikovat. Zkuste to prosím znovu.'

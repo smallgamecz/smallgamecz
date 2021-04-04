@@ -75,10 +75,6 @@
         </div>
       </q-tab-panel>
     </q-tab-panels>
-
-    <q-inner-loading :showing="loading">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
   </q-page>
 </template>
 
@@ -87,28 +83,33 @@ export default {
   name: 'PagesPanelBackupRestore',
   data () {
     return {
-      loading: false,
       tab: 'backup',
       exported: '',
       restoring: '',
       url: ''
     }
   },
+  computed: {
+    loading () {
+      return this.$store.state.app.loading
+    }
+  },
   methods: {
     exportData () {
       try {
-        this.loading = true
-        this.$sailsIo.socket.post(`/v1/game/${this.$route.params.id}/backup`, response => {
-          this.exported = JSON.stringify(response)
+        this.$store.commit('app/loading', true)
 
-          this.loading = false
+        this.$sailsIo.socket.post(`/v1/game/${this.$route.params.id}/backup`, response => {
+          this.$store.commit('app/loading', false)
+
+          this.exported = JSON.stringify(response)
 
           this.$smallgame.positive({
             message: 'Aktuální data jsme zálohovali do textového pole na stránce. Můžete si je zkopírovat a uložit.'
           })
         })
       } catch (error) {
-        this.loading = false
+        this.$store.commit('app/loading', false)
 
         if (error) {
           console.error(error)
@@ -128,12 +129,12 @@ export default {
       try {
         const data = JSON.parse(this.restoring)
 
-        this.loading = true
+        this.$store.commit('app/loading', true)
 
         this.$sailsIo.socket.post(`/v1/game/${this.$route.params.id}/restore`, {
           data
         }, response => {
-          this.loading = false
+          this.$store.commit('app/loading', false)
 
           if (typeof response !== 'boolean') {
             console.error(response)
@@ -149,7 +150,7 @@ export default {
           })
         })
       } catch (error) {
-        this.loading = false
+        this.$store.commit('app/loading', false)
 
         if (error) {
           console.error(error)

@@ -1,5 +1,3 @@
-const JSend = require('jsend')
-
 module.exports = {
 
   friendlyName: 'Create a new game.',
@@ -23,7 +21,7 @@ module.exports = {
 
       // if source is specified, import questions
       if (inputs.source) {
-        await sails.helpers.importQuestionsFromUrl(game.id, inputs.source)
+        await sails.helpers.importQuestionsFromUrl(game.id, inputs.source, 100, true)
       }
 
       return exits.success(game)
