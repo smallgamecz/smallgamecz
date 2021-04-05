@@ -24,10 +24,10 @@ module.exports.round = {
       questions: 25,
       break: [1, 3, 6, 10, 15, 19, 22, 24]
     },
-    hourglass24: {
-      name: 'přesýpací hodiny, 24 políček',
-      questions: 24,
-      break: [4, 7, 9, 10, 12, 15, 19]
+    hourglass29: {
+      name: 'přesýpací hodiny, 29 políček',
+      questions: 29,
+      break: [5, 19, 12, 14, 15, 17, 20, 24]
     }
   }
 }

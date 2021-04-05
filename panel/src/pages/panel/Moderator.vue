@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <template v-if="!loading.state">
+    <template v-if="!loading">
       <template v-if="showRoundForm">
         <rounds-form @update="roundFormCreate" />
       </template>
@@ -41,7 +41,7 @@
                   color="secondary"
                   icon="pause"
                   @click="pauseRound"
-                  :disable="loading.pause || !isRunning"
+                  :disable="loading || !isRunning"
                   v-if="isRunning"
                 >
                   pozastavit hru
@@ -50,7 +50,7 @@
                   color="secondary"
                   icon="play_arrow"
                   @click="startRound"
-                  :disable="loading.start || isRunning"
+                  :disable="loading || isRunning"
                   v-if="!isRunning"
                 >
                   spustit hru
@@ -60,7 +60,7 @@
                 color="secondary"
                 icon="refresh"
                 @click="resetRound"
-                :disable="loading.pause"
+                :disable="loading"
                 v-if="state.round.winner === -1"
               >
                 reset hry
@@ -70,7 +70,7 @@
                 color="secondary"
                 icon="emoji_events"
                 @click="endRound"
-                :disable="loading.start || !isRunning"
+                :disable="loading || !isRunning"
               >
                 ukončit hru
               </q-btn>
@@ -274,10 +274,6 @@
       </template>
     </template>
 
-    <q-inner-loading :showing="loading.state || loading.start || loading.pause || loading.reset ">
-      <q-spinner-gears size="100px" color="primary" />
-    </q-inner-loading>
-
     <select-random-winner :start="randomizeWinner" :stop-with-winner="randomizedWinnerIs" />
   </q-page>
 </template>
@@ -297,12 +293,7 @@ export default {
   },
   data () {
     return {
-      loading: {
-        state: false,
-        start: false,
-        pause: false,
-        reset: false
-      },
+      loading: false,
       state: {
         round: {
           running: false,
@@ -423,7 +414,7 @@ export default {
       }
 
       if (verbose) {
-        this.loading.state = true
+        this.$store.commit('app/loading', true)
       }
 
       try {
@@ -431,7 +422,7 @@ export default {
           game: this.$route.params.id
         }, (response) => {
           if (verbose) {
-            this.loading.state = false
+            this.$store.commit('app/loading', false)
           }
 
           if (response && response.data) {
@@ -443,7 +434,7 @@ export default {
         })
       } catch (error) {
         if (verbose) {
-          this.loading.state = false
+          this.$store.commit('app/loading', false)
         }
 
         if (error) {
@@ -513,18 +504,19 @@ export default {
         }
       })
 
-      this.loading.start = true
+      this.$store.commit('app/loading', true)
 
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/start`)
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/start`, () => {
+          this.$store.commit('app/loading', false)
+        })
       } catch (error) {
+        this.$store.commit('app/loading', false)
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné spustit herní kolo. Zkuste obnovit stránku.'
         })
       }
-
-      this.loading.start = false
     },
 
     pauseRound () {
@@ -536,18 +528,20 @@ export default {
         }
       })
 
-      this.loading.pause = true
+      this.$store.commit('app/loading', true)
 
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/pause`)
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/pause`, () => {
+          this.$store.commit('app/loading', false)
+        })
       } catch (error) {
+        this.$store.commit('app/loading', false)
+
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné přerušit herní kolo. Zkuste obnovit stránku.'
         })
       }
-
-      this.loading.pause = false
     },
 
     resetRound () {
@@ -565,18 +559,20 @@ export default {
         }
       })
 
-      this.loading.reset = true
+      this.$store.commit('app/loading', true)
 
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/reset`)
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/reset`, () => {
+          this.$store.commit('app/loading', false)
+        })
       } catch (error) {
+        this.$store.commit('app/loading', false)
+
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné resetovat herní kolo. Zkuste obnovit stránku.'
         })
       }
-
-      this.loading.reset = false
     },
 
     endRound () {
@@ -592,7 +588,7 @@ export default {
     },
 
     updatePlayerResult (result) {
-      this.loading.pause = true
+      this.$store.commit('app/loading', true)
 
       try {
         this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/result`, {
@@ -600,17 +596,19 @@ export default {
           question: this.activeQuestion.id,
           result
         }, (_) => {
+          this.$store.commit('app/loading', false)
+
           this.fetch(false)
           this.clearRoundInterval()
         })
       } catch (error) {
+        this.$store.commit('app/loading', false)
+
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné přerušit herní kolo. Zkuste obnovit stránku.'
         })
       }
-
-      this.loading.pause = false
     },
 
     winRound (winner) {
@@ -674,10 +672,10 @@ export default {
     },
 
     reserveQuestions (cb) {
-      this.loading.state = true
+      this.$store.commit('app/loading', true)
 
       this.$sailsIo.socket.get(`/v1/round/${this.$route.params.round}/reserve-questions`, (_) => {
-        this.loading.state = false
+        this.$store.commit('app/loading', false)
 
         if (typeof cb === 'function') {
           cb()
