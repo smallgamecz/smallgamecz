@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <template v-if="!loading">
+    <template v-if="!loading.state">
       <template v-if="showRoundForm">
         <rounds-form @update="roundFormCreate" />
       </template>
@@ -41,7 +41,7 @@
                   color="secondary"
                   icon="pause"
                   @click="pauseRound"
-                  :disable="loading || !isRunning"
+                  :disable="loading.pause || !isRunning"
                   v-if="isRunning"
                 >
                   pozastavit hru
@@ -50,7 +50,7 @@
                   color="secondary"
                   icon="play_arrow"
                   @click="startRound"
-                  :disable="loading || isRunning"
+                  :disable="loading.start || isRunning"
                   v-if="!isRunning"
                 >
                   spustit hru
@@ -60,7 +60,7 @@
                 color="secondary"
                 icon="refresh"
                 @click="resetRound"
-                :disable="loading"
+                :disable="loading.pause"
                 v-if="state.round.winner === -1"
               >
                 reset hry
@@ -70,7 +70,7 @@
                 color="secondary"
                 icon="emoji_events"
                 @click="endRound"
-                :disable="loading || !isRunning"
+                :disable="loading.start || !isRunning"
               >
                 ukončit hru
               </q-btn>
@@ -273,6 +273,11 @@
         </q-dialog>
       </template>
     </template>
+
+    <q-inner-loading :showing="loading.state || loading.start || loading.pause || loading.reset ">
+      <q-spinner-gears size="100px" color="primary" />
+    </q-inner-loading>
+
     <select-random-winner :start="randomizeWinner" :stop-with-winner="randomizedWinnerIs" />
   </q-page>
 </template>
@@ -292,6 +297,12 @@ export default {
   },
   data () {
     return {
+      loading: {
+        state: false,
+        start: false,
+        pause: false,
+        reset: false
+      },
       state: {
         round: {
           running: false,
@@ -310,9 +321,6 @@ export default {
     }
   },
   computed: {
-    loading () {
-      return this.$store.state.app.loading
-    },
     usedQuestions () {
       return this.state.round.questions.filter(q => {
         return q.used === true
@@ -415,7 +423,7 @@ export default {
       }
 
       if (verbose) {
-        this.$store.commit('app/loading', true)
+        this.loading.state = true
       }
 
       try {
@@ -423,7 +431,7 @@ export default {
           game: this.$route.params.id
         }, (response) => {
           if (verbose) {
-            this.$store.commit('app/loading', false)
+            this.loading.state = false
           }
 
           if (response && response.data) {
@@ -435,7 +443,7 @@ export default {
         })
       } catch (error) {
         if (verbose) {
-          this.$store.commit('app/loading', false)
+          this.loading.state = false
         }
 
         if (error) {
@@ -505,20 +513,18 @@ export default {
         }
       })
 
-      this.$store.commit('app/loading', true)
+      this.loading.start = true
 
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/start`, () => {
-          this.$store.commit('app/loading', false)
-        })
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/start`)
       } catch (error) {
-        this.$store.commit('app/loading', false)
-
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné spustit herní kolo. Zkuste obnovit stránku.'
         })
       }
+
+      this.loading.start = false
     },
 
     pauseRound () {
@@ -530,20 +536,18 @@ export default {
         }
       })
 
-      this.$store.commit('app/loading', true)
+      this.loading.pause = true
 
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/pause`, () => {
-          this.$store.commit('app/loading', false)
-        })
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/pause`)
       } catch (error) {
-        this.$store.commit('app/loading', false)
-
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné přerušit herní kolo. Zkuste obnovit stránku.'
         })
       }
+
+      this.loading.pause = false
     },
 
     resetRound () {
@@ -561,20 +565,18 @@ export default {
         }
       })
 
-      this.$store.commit('app/loading', true)
+      this.loading.reset = true
 
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/reset`, () => {
-          this.$store.commit('app/loading', false)
-        })
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/reset`)
       } catch (error) {
-        this.$store.commit('app/loading', false)
-
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné resetovat herní kolo. Zkuste obnovit stránku.'
         })
       }
+
+      this.loading.reset = false
     },
 
     endRound () {
@@ -590,7 +592,7 @@ export default {
     },
 
     updatePlayerResult (result) {
-      this.$store.commit('app/loading', true)
+      this.loading.pause = true
 
       try {
         this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/result`, {
@@ -598,19 +600,17 @@ export default {
           question: this.activeQuestion.id,
           result
         }, (_) => {
-          this.$store.commit('app/loading', false)
-
           this.fetch(false)
           this.clearRoundInterval()
         })
       } catch (error) {
-        this.$store.commit('app/loading', false)
-
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné přerušit herní kolo. Zkuste obnovit stránku.'
         })
       }
+
+      this.loading.pause = false
     },
 
     winRound (winner) {
@@ -674,10 +674,10 @@ export default {
     },
 
     reserveQuestions (cb) {
-      this.$store.commit('app/loading', true)
+      this.loading.state = true
 
       this.$sailsIo.socket.get(`/v1/round/${this.$route.params.round}/reserve-questions`, (_) => {
-        this.$store.commit('app/loading', false)
+        this.loading.state = false
 
         if (typeof cb === 'function') {
           cb()
