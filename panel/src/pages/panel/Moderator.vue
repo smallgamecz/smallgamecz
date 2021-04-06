@@ -509,14 +509,9 @@ export default {
         }
       })
 
-      this.$store.commit('app/loading', true)
-
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/start`, () => {
-          this.$store.commit('app/loading', false)
-        })
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/start`)
       } catch (error) {
-        this.$store.commit('app/loading', false)
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné spustit herní kolo. Zkuste obnovit stránku.'
@@ -533,15 +528,9 @@ export default {
         }
       })
 
-      this.$store.commit('app/loading', true)
-
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/pause`, () => {
-          this.$store.commit('app/loading', false)
-        })
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/pause`)
       } catch (error) {
-        this.$store.commit('app/loading', false)
-
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné přerušit herní kolo. Zkuste obnovit stránku.'
@@ -564,15 +553,9 @@ export default {
         }
       })
 
-      this.$store.commit('app/loading', true)
-
       try {
-        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/reset`, () => {
-          this.$store.commit('app/loading', false)
-        })
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/reset`)
       } catch (error) {
-        this.$store.commit('app/loading', false)
-
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné resetovat herní kolo. Zkuste obnovit stránku.'
@@ -593,22 +576,16 @@ export default {
     },
 
     updatePlayerResult (result) {
-      this.$store.commit('app/loading', true)
-
       try {
         this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/result`, {
           player: this.state.round.whoPlays,
           question: this.activeQuestion.id,
           result
         }, (_) => {
-          this.$store.commit('app/loading', false)
-
           this.fetch(false)
           this.clearRoundInterval()
         })
       } catch (error) {
-        this.$store.commit('app/loading', false)
-
         console.error(error)
         this.$smallgame.negative({
           message: 'Není možné přerušit herní kolo. Zkuste obnovit stránku.'
