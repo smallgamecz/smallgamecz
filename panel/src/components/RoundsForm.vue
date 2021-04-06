@@ -139,6 +139,12 @@
 <script>
 export default {
   name: 'RoundsFormComponent',
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       form: {
@@ -157,9 +163,6 @@ export default {
     }
   },
   computed: {
-    loading () {
-      return this.$store.state.app.loading
-    },
     formIsValid () {
       if (!this.form.name.length) {
         return false
@@ -231,7 +234,7 @@ export default {
   },
   methods: {
     fetchFreeQuestions () {
-      this.$store.commit('app/loading', true)
+      // this.$store.commit('app/loading', true)
 
       try {
         const where = []
@@ -245,14 +248,14 @@ export default {
             round: 'null'
           }
         }, (response) => {
-          this.$store.commit('app/loading', false)
+          // this.$store.commit('app/loading', false)
 
           if (response && typeof response === 'object') {
             this.freeQuestions = response.data
           }
         })
       } catch (error) {
-        this.$store.commit('app/loading', false)
+        // this.$store.commit('app/loading', false)
         console.error(error)
       }
     },
@@ -304,14 +307,14 @@ export default {
       })
 
       try {
-        this.$store.commit('app/loading', true)
+        // this.$store.commit('app/loading', true)
 
         if (!form.game) {
           form.game = this.$route.params.id
         }
 
         this.$sailsIo.socket.post('/v1/round', form, response => {
-          this.$store.commit('app/loading', false)
+          // this.$store.commit('app/loading', false)
 
           if (!response) {
             this.$smallgame.negative({
@@ -328,7 +331,7 @@ export default {
           this.$emit('update', response)
         })
       } catch (error) {
-        this.$store.commit('app/loading', false)
+        // this.$store.commit('app/loading', false)
 
         console.error(error)
         this.$smallgame.negative({

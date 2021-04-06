@@ -2,7 +2,10 @@
   <q-page padding>
     <template v-if="!loading">
       <template v-if="showRoundForm">
-        <rounds-form @update="roundFormCreate" />
+        <rounds-form
+          :loading="loading"
+          @update="roundFormCreate"
+        />
       </template>
 
       <template v-else>
@@ -293,7 +296,6 @@ export default {
   },
   data () {
     return {
-      loading: false,
       state: {
         round: {
           running: false,
@@ -312,6 +314,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.app.loading
+    },
     usedQuestions () {
       return this.state.round.questions.filter(q => {
         return q.used === true
