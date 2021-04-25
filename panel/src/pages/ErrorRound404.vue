@@ -14,8 +14,8 @@
         color="white"
         text-color="blue"
         unelevated
-        to="/"
-        label="Zkuste hlavní stranu"
+        :to="{ name: 'play' }"
+        label="nová hra"
         no-caps
       />
     </div>

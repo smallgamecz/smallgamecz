@@ -65,6 +65,14 @@ const routes = [
   },
 
   {
+    path: '/play',
+    component: () => import('layouts/PlayLayout'),
+    children: [
+      { path: '', name: 'play', component: () => import('pages/Play.vue'), meta: { auth: true } }
+    ]
+  },
+
+  {
     path: '/panel/:id/rounds/:round/winner',
     component: () => import('layouts/PlayLayout'),
     children: [

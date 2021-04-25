@@ -12,6 +12,11 @@
       Jakým způsobem, to záleží na tom, jak se hráči dohodnou. U čtverce se mohou rozhodnout spojit pouze tři strany nebo taky všechny čtyři.
     </p>
 
+    <h2 class="q-ma-none q-mb-md text-h4">Počet hráčů</h2>
+    <p>
+      Hru hrají dva hráči a jeden moderátor. Je vhodná tedy pro 3 osoby.
+    </p>
+
     <h2 class="q-ma-none q-mb-md text-h4">Průběh hry</h2>
 
     <p>

@@ -73,6 +73,7 @@ const routes = {
   'GET /v1/round/:id/state': 'v1/round/state',
   'PATCH /v1/round/:round/end': 'v1/round/end',
   'PATCH /v1/round/:round/reset': 'v1/round/reset',
+  'POST /v1/round/verify': 'v1/round/verify'
 }
 
 if (process.env.NODE_ENV === 'development') {

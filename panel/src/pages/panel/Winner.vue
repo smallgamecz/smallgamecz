@@ -11,8 +11,17 @@
           {{ player }}
         </template>
       </h1>
+      <q-btn
+        class="q-mt-xl"
+        color="white"
+        text-color="blue"
+        type="link"
+        unelevated
+        :to="{ name: 'play' }"
+        label="nová hra"
+        no-caps
+      />
     </div>
-
   </q-page>
 </template>
 

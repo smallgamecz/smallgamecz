@@ -8,7 +8,7 @@
  * https://sailsjs.com/docs/concepts/policies
  */
 
- const blueprintTokenPolicy = {
+const blueprintTokenPolicy = {
   find: 'token',
   findOne: 'token',
   create: 'token',
@@ -45,7 +45,7 @@ module.exports.policies = {
   'v1/round/select-question': 'token',
   'v1/round/start': 'token',
   'v1/round/pause': 'token',
-  'v1/round/state': 'token',
+  'v1/round/verify': 'token',
   'v1/round/result': 'token',
   'v1/round/end': 'token',
   'v1/round/reset': 'token',

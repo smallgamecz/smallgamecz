@@ -55,7 +55,7 @@
       </div>
 
       <q-dialog :value="!state.round.running" persistent>
-        <q-card class="bg-secondary text-white" style="width: 600px">
+        <q-card class="bg-secondary text-white" style="min-width: 700px">
           <q-card-section horizontal>
             <q-card-section>
               <q-icon name="pause" style="font-size: 200%" />
@@ -76,7 +76,7 @@
       <q-dialog v-if="activeQuestion" :value="activeQuestion && Object.keys(activeQuestion).length > 0" persistent>
         <q-card
           class="text-white relative-position"
-          style="width: 600px"
+          style="min-width: 700px"
           :class="{ 'bg-blue': state.round.whoPlays === 1, 'bg-orange': state.round.whoPlays === 2 }"
         >
           <q-linear-progress color="red" size="md" :value="1 - (roundTimer / 100)" />

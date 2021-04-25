@@ -39,7 +39,8 @@ module.exports = {
         id: round
       }).set({
         winner: winner,
-        running: false
+        running: false,
+        code: ''
       })
 
       // unblock all questions that has not been selected to other round

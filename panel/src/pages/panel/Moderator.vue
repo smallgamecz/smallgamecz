@@ -83,24 +83,9 @@
 
         <div class="row q-mt-md q-mb-md" v-if="state.round.winner === -1">
           <div class="col-12">
-            <q-btn-group>
-              <q-btn
-                type="a"
-                :href="socialLink"
-                target="_blank"
-                icon="link"
-              >
-                odkaz pro hráče
-              </q-btn>
-              <q-separator vertical inset />
-              <q-btn
-                icon="content_copy"
-                class="copy"
-                :data-clipboard-text="socialLink"
-              >
-                <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
-              </q-btn>
-            </q-btn-group>
+            <q-btn @click="dialog = true" icon="help">
+              Jak hru hrát?
+            </q-btn>
           </div>
         </div>
 
@@ -278,6 +263,39 @@
     </template>
 
     <select-random-winner :start="randomizeWinner" :stop-with-winner="randomizedWinnerIs" />
+
+    <q-dialog
+      :value="dialog"
+      @hide="dialog = false"
+    >
+      <q-card style="min-width: 600px">
+        <q-card-section>
+          Na jiném zařízení přejděte na tento odkaz:<br>
+          <a :href="socialLink" target="_blank" class="text-h6" style="text-decoration: none; color: inherit">{{ socialLink }}</a>
+          <q-btn
+              flat
+              round
+              icon="content_copy"
+              class="copy"
+              :data-clipboard-text="socialLink"
+              size="sm"
+            >
+              <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
+            </q-btn>
+        </q-card-section>
+
+        <q-card-section>
+          <div>Pro vstup do této hry pak budete potřebovat zadat kód:</div>
+          <div class="text-h5">{{ state.round.code }}</div>
+        </q-card-section>
+
+        <q-separator inset />
+
+        <q-card-actions>
+          <q-btn flat @click="dialog = false" class="text-secondary">rozumím</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -287,6 +305,7 @@ import getQuestionDisabledState from '../../helpers/get-question-disabled-state'
 import getQuestionButtonColor from '../../helpers/get-question-button-color'
 import SelectRandomWinner from '../../components/SelectRandomWinner'
 import RoundsForm from '../../components/RoundsForm'
+const APP_PLAYER_LINK = process.env.APP_PLAYER_LINK
 
 export default {
   name: 'PagePanelModerator',
@@ -310,7 +329,9 @@ export default {
       roundInterval: null,
       randomizeWinner: false,
       randomizedWinnerIs: -1,
-      showRoundForm: false
+      showRoundForm: false,
+      dialog: false,
+      APP_PLAYER_LINK
     }
   },
   computed: {
@@ -342,7 +363,7 @@ export default {
       }
     },
     socialLink () {
-      return `${window.location.origin}/${this.$router.resolve({ name: 'panel.player', params: { id: this.$route.params.id, round: this.state.round.id } }).href}`
+      return this.APP_PLAYER_LINK
     },
     getImageForRound () {
       try {

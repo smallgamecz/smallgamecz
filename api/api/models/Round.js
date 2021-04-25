@@ -44,6 +44,10 @@ module.exports = {
     moves: {
       collection: 'roundMove',
       via: 'round'
+    },
+    code: {
+      type: 'string',
+      defaultsTo: ''
     }
   },
 
@@ -56,6 +60,8 @@ module.exports = {
 
       data.type = roundType.id
     }
+
+    data.code = await sails.helpers.getRoomEnterCode()
 
     return proceed()
   },
