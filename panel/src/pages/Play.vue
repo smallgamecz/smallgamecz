@@ -5,7 +5,7 @@
         <h1 class="text-h5 q-ma-none">zadejte kód hry</h1>
         <h2 class="text-h6 q-ma-none">a stiskněte <i>enter</i></h2>
       </div>
-      <div class="col-1">
+      <div class="col-xs-2 col-md-1">
         <q-input
           autofocus
           filled
@@ -14,7 +14,7 @@
           ref="code0"
         />
       </div>
-      <div class="col-1">
+      <div class="col-xs-2 col-md-1">
         <q-input
           filled
           v-model="form.code1"
@@ -22,7 +22,7 @@
           ref="code1"
         />
       </div>
-      <div class="col-1">
+      <div class="col-xs-2 col-md-1">
         <q-input
           filled
           v-model="form.code2"
@@ -30,7 +30,7 @@
           ref="code2"
         />
       </div>
-      <div class="col-1">
+      <div class="col-xs-2 col-md-1">
         <q-input
           filled
           v-model="form.code3"
@@ -38,7 +38,7 @@
           ref="code3"
         />
       </div>
-      <div class="col-1">
+      <div class="col-xs-2 col-md-1">
         <q-input
           filled
           v-model="form.code4"
