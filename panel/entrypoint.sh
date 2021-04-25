@@ -8,7 +8,7 @@ touch ./.quasar.env.json
 API_TOKEN=${API_TOKEN}
 APP_API_URL=${APP_API_URL}
 
-echo '{"production":{"API_TOKEN":"'$API_TOKEN'","APP_API_URL":"'$APP_API_URL'"}}' >> ./.quasar.env.json
+echo '{"production":{"API_TOKEN":"'$API_TOKEN'","APP_API_URL":"'$APP_API_URL'","APP_PLAYER_LINK":"'$APP_PLAYER_LINK'"}}' >> ./.quasar.env.json
 
 npm run build
 
