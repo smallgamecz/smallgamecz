@@ -268,7 +268,7 @@
       :value="dialog"
       @hide="dialog = false"
     >
-      <q-card style="min-width: 600px">
+      <q-card style="max-width: 600px">
         <q-card-section>
           Na jiném zařízení přejděte na tento odkaz:<br>
           <a :href="socialLink" target="_blank" class="text-h6" style="text-decoration: none; color: inherit">{{ socialLink }}</a>

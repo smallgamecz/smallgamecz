@@ -14,8 +14,8 @@
         color="white"
         text-color="blue"
         unelevated
-        to="/"
-        label="Zkuste hlavní stranu"
+        :to="{ name: 'play' }"
+        label="zkusit jinou hru"
         no-caps
       />
     </div>
