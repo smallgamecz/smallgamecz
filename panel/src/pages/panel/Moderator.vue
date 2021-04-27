@@ -149,7 +149,7 @@
                 <q-card-section class="bg-white">
                   <div class="row q-col-gutter-sm">
                     <div class="col-12 text-black">
-                      Kdo získal otázku?
+                      Kdo získává otázku?
                     </div>
                     <div class="col-xs-12 col-sm-4">
                       <q-btn
