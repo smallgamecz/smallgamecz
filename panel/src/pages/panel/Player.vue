@@ -83,11 +83,11 @@
 
           <q-card-section class="text-h6">
             <div v-if="state.round.whoPlays === 1">
-              <q-icon name="person" />
+              <q-avatar color="grey">{{ activeQuestion.position - 1 }}</q-avatar>
               {{ state.round.player1 }}
             </div>
             <div v-if="state.round.whoPlays === 2">
-              <q-icon name="person" />
+              <q-avatar color="grey">{{ activeQuestion.position - 1 }}</q-avatar>
               {{ state.round.player2 }}
             </div>
           </q-card-section>
@@ -199,6 +199,10 @@ export default {
             }
 
             if (data.result === 1) {
+              this.$sounder.questionWin()
+            }
+
+            if (data.result === 2) {
               this.$sounder.questionWin()
             }
             break

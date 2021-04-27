@@ -14,11 +14,7 @@ module.exports = {
       required: true
     },
     player: {
-      type: 'number',
-      required: true
-    },
-    result: {
-      type: 'number',
+      type: 'number', // "1", "2" or "0" (nobody)
       required: true
     }
   },
@@ -47,7 +43,7 @@ module.exports = {
       await Question.updateOne({
         id: inputs.question
       }).set({
-        winner: inputs.result ? inputs.player : 0,
+        winner: inputs.player,
         used: true,
         active: false
       })
@@ -69,7 +65,7 @@ module.exports = {
         sails.sockets.broadcast(inputs.round, 'round', {
           action: 'round.result',
           round: inputs.round,
-          result: inputs.result
+          result: inputs.player
         })
       }
 

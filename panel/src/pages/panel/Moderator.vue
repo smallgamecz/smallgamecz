@@ -39,6 +39,9 @@
               >
                 zpět
               </q-btn>
+              <q-btn @click="dialog = true" icon="help" color="grey">
+                Jak hru hrát?
+              </q-btn>
               <template v-if="state.round.winner === -1">
                 <q-btn
                   color="secondary"
@@ -78,14 +81,6 @@
                 ukončit hru
               </q-btn>
             </q-btn-group>
-          </div>
-        </div>
-
-        <div class="row q-mt-md q-mb-md" v-if="state.round.winner === -1">
-          <div class="col-12">
-            <q-btn @click="dialog = true" icon="help">
-              Jak hru hrát?
-            </q-btn>
           </div>
         </div>
 
@@ -137,7 +132,8 @@
                   />
                 </q-card-section>
                 <q-card-section class="text-h6 q-pt-none">
-                  <q-icon name="help" /> {{ activeQuestion.title }}
+                  <q-avatar color="grey">{{ activeQuestion.position - 1 }}</q-avatar>
+                  {{ activeQuestion.title }}
                 </q-card-section>
                 <div class="text-h2 text-center">
                   <q-card class="bg-primary">
@@ -150,26 +146,36 @@
                 <q-card-section class="q-mt-md text-h6">
                   <q-icon name="question_answer" /> {{ activeQuestion.answer }}
                 </q-card-section>
-                <q-card-section>
+                <q-card-section class="bg-white">
                   <div class="row q-col-gutter-sm">
-                    <div class="col-xs-12 col-sm-6">
+                    <div class="col-12 text-black">
+                      Kdo získal otázku?
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
                       <q-btn
-                        color="green"
-                        label="Správně"
+                        color="blue"
+                        :label="state.round.player1"
                         class="full-width"
-                        @click="updatePlayerResult(1)"
+                        @click="updateQuestionResult(1)"
                         :disable="state.round.running === false"
-                        icon="check_circle"
                       />
                     </div>
-                    <div class="col-xs-12 col-sm-6">
+                    <div class="col-xs-12 col-sm-4">
                       <q-btn
-                        color="red"
-                        label="Chybně"
+                        color="grey"
+                        label="nikdo"
                         class="full-width"
-                        @click="updatePlayerResult(0)"
+                        @click="updateQuestionResult(0)"
                         :disable="state.round.running === false"
-                        icon="dangerous"
+                      />
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                      <q-btn
+                        color="orange"
+                        :label="state.round.player2"
+                        class="full-width"
+                        @click="updateQuestionResult(2)"
+                        :disable="state.round.running === false"
                       />
                     </div>
                   </div>
@@ -596,12 +602,11 @@ export default {
       })
     },
 
-    updatePlayerResult (result) {
+    updateQuestionResult (resultWinner) {
       try {
         this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}/result`, {
-          player: this.state.round.whoPlays,
-          question: this.activeQuestion.id,
-          result
+          player: resultWinner,
+          question: this.activeQuestion.id
         }, (_) => {
           this.fetch(false)
           this.clearRoundInterval()
