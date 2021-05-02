@@ -4,15 +4,6 @@
       <div class="col">
         <q-btn icon="arrow_left" @click="$router.back()" label="zpátky" />
       </div>
-      <div class="col text-right">
-        <q-btn
-          color="secondary"
-          icon="check"
-          label="uložit & hrát"
-          @click="onSubmit(true)"
-          :disable="!formIsValid"
-        />
-      </div>
     </div>
 
     <template v-if="!loading">
@@ -24,114 +15,23 @@
         Doplňte otázky nebo vyberte jiný typ hry.
       </q-banner>
 
-      <q-stepper
-        v-model="step"
-        ref="stepper"
-        color="primary"
-        animated
-        class="q-ma-lg"
-      >
-        <q-step
-          :name="1"
-          title="Hra"
-          icon="gamepad"
-          :done="step > 1"
-        >
-          <h4 class="text-h5 q-ma-none q-mb-md text-center">Jaký typ hry chcete hrát?</h4>
-
-          <div class="row q-col-gutter-md">
-            <div class="col-xs-12 col-sm-6 col-md-3" v-for="type in roundTypes" :key="type.id">
-              <q-card class="cursor-pointer" @click="selectRoundType(type)" :class="{ 'q-card-selected shadow-15' : type.id === selected.type }">
-                <q-img
-                  :src="getImageForRoundById(type.id)"
-                >
-                  <div class="absolute-bottom text-subtitle2">
-                    {{ type.label }}
-                  </div>
-                </q-img>
-              </q-card>
-            </div>
-          </div>
-
-          <q-stepper-navigation class="q-gutter-sm text-center">
-            <q-separator spaced />
-            <q-btn outline @click="() => { step = 2 }" color="primary" label="kdo bude hrát?" icon-right="arrow_right" />
-          </q-stepper-navigation>
-        </q-step>
-
-        <q-step
-          :name="2"
-          title="Hráči"
-          icon="gamepad"
-          :done="step > 1"
-        >
-          <div class="row justify-center">
-            <div class="col-10">
-              <div class="fit row justify-center q-col-gutter-md text-center">
-                <div class="col-xs-12 col-sm-6 col-md-6">
-                  <div>
-                    <q-icon name="person" size="10em" class="text-grey" />
-                  </div>
-                  <div>
-                    <q-input
-                      filled
-                      v-model="form.player1"
-                      label="Hráč 1 *"
-                      hint="Jak se jmenuje první hráč?"
-                      lazy-rules
-                      :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit jméno prvního hráče.']"
-                      @keypress.enter="onSubmit(true)"
-                    />
-                  </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-6">
-                  <div>
-                    <q-icon name="person" size="10em" class="text-grey" />
-                  </div>
-                  <div>
-                    <q-input
-                      filled
-                      v-model="form.player2"
-                      label="Hráč 2 *"
-                      hint="Jak se jmenuje druhý hráč?"
-                      lazy-rules
-                      :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit jméno druhého hráče.']"
-                      @keypress.enter="onSubmit(true)"
-                    />
-                  </div>
-                </div>
+      <div class="row q-col-gutter-md justify-center">
+        <div class="col-12 text-center">
+          <h4 class="text-h5 q-ma-none q-mb-md">Vyberte typ hry, který si chcete zahrát?</h4>
+          <p>Hra se pak hned spustí.</p>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2" v-for="type in roundTypes" :key="type.id">
+          <q-card class="cursor-pointer" @click="selectRoundType(type)" :class="{ 'q-card-selected shadow-15' : type.id === selected.type }">
+            <q-img
+              :src="getImageForRoundById(type.id)"
+            >
+              <div class="absolute-bottom text-subtitle2">
+                {{ type.label }}
               </div>
-            </div>
-          </div>
-
-          <q-stepper-navigation class="q-gutter-sm">
-            <q-separator spaced />
-
-            <div class="row q-col-gutter-md justify-center">
-              <div class="col-xs-12 col-sm-4">
-                <q-btn
-                  class="full-width"
-                  outline
-                  @click="() => { step = 1 }"
-                  color="primary"
-                  label="změnit typ hry"
-                  icon="arrow_left"
-                />
-              </div>
-              <div class="col-xs-12 col-sm-4 text-right">
-                <q-btn
-                  class="full-width"
-                  color="secondary"
-                  icon="check"
-                  label="uložit & hrát"
-                  @click="onSubmit(true)"
-                  :disable="!formIsValid"
-                />
-              </div>
-            </div>
-          </q-stepper-navigation>
-        </q-step>
-      </q-stepper>
+            </q-img>
+          </q-card>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -164,19 +64,7 @@ export default {
   },
   computed: {
     formIsValid () {
-      if (!this.form.name.length) {
-        return false
-      }
-
       if (!this.form.type.length) {
-        return false
-      }
-
-      if (!this.form.player1.length) {
-        return false
-      }
-
-      if (!this.form.player2.length) {
         return false
       }
 
@@ -186,6 +74,7 @@ export default {
 
       return true
     },
+
     enoughQuestion () {
       try {
         if (this.freeQuestions.length < this.getSelectedRoundType.questions) {
@@ -272,14 +161,6 @@ export default {
                 key: t.key,
                 id: t.id
               })
-
-              // default selection
-              if (t.key === 'triangle28') {
-                if (!this.form.type) {
-                  this.form.type = t.id
-                  this.selected.type = t.id
-                }
-              }
             }
           }
         })
@@ -288,12 +169,9 @@ export default {
       }
     },
 
-    onSubmit (forceSubmit) {
-      if (typeof forceSubmit === 'boolean' && forceSubmit === false) {
-        if (this.step !== 2) {
-          ++this.step
-          return false
-        }
+    onSubmit () {
+      if (!this.formIsValid) {
+        return false
       }
 
       const form = JSON.parse(JSON.stringify(this.form))
@@ -360,6 +238,8 @@ export default {
         this.selected.type = type.id
         this.form.type = type.id
       }
+
+      this.onSubmit()
     }
   }
 }

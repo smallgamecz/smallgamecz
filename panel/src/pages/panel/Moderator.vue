@@ -31,56 +31,65 @@
         </q-banner>
 
         <div class="row q-mb-md">
-          <div class="col">
-            <q-btn-group>
-              <q-btn
-                icon="keyboard_backspace"
-                @click="goBack"
-              >
-                zpět
-              </q-btn>
-              <q-btn @click="dialog = true" icon="help" color="grey">
-                Jak hru hrát?
-              </q-btn>
-              <template v-if="state.round.winner === -1">
-                <q-btn
-                  color="secondary"
-                  icon="pause"
-                  @click="pauseRound"
-                  :disable="loading || !isRunning"
-                  v-if="isRunning"
-                >
-                  pozastavit hru
-                </q-btn>
-                <q-btn
-                  color="secondary"
-                  icon="play_arrow"
-                  @click="startRound"
-                  :disable="loading || isRunning"
-                  v-if="!isRunning"
-                >
-                  spustit hru
-                </q-btn>
-              </template>
-              <q-btn
-                color="secondary"
-                icon="refresh"
-                @click="resetRound"
-                :disable="loading"
-                v-if="state.round.winner === -1"
-              >
-                reset hry
-              </q-btn>
-              <q-btn
-                v-if="state.round.winner === -1"
-                color="secondary"
-                icon="emoji_events"
-                @click="endRound"
-                :disable="loading || !isRunning"
-              >
-                ukončit hru
-              </q-btn>
-            </q-btn-group>
+          <div class="col-12">
+            <q-btn
+              icon="keyboard_backspace"
+              @click="goBack"
+              class="q-mr-sm"
+            >
+              zpět
+            </q-btn>
+
+            <q-btn
+              icon="help"
+              @click="dialog = true"
+              class="q-mr-sm"
+            >
+              Jak hrát?
+            </q-btn>
+
+            <template v-if="state.round.winner === -1">
+              <q-btn-dropdown label="Ovládání" icon="gamepad">
+                <q-list>
+                  <q-item clickable v-close-popup @click="pauseRound" :disable="loading || !isRunning" v-if="isRunning">
+                    <q-item-section avatar>
+                      <q-avatar icon="pause" color="primary" text-color="white" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Pozastavit</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="startRound" :disable="loading || isRunning" v-if="!isRunning">
+                    <q-item-section avatar>
+                      <q-avatar icon="play_arrow" color="primary" text-color="white" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Spustit</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="resetRound" :disable="loading" v-if="state.round.winner === -1">
+                    <q-item-section avatar>
+                      <q-avatar icon="refresh" color="primary" text-color="white" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Restart</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="endRound" :disable="loading || !isRunning" v-if="state.round.winner === -1">
+                    <q-item-section avatar>
+                      <q-avatar icon="emoji_events" color="primary" text-color="white" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Ukončit</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                </q-list>
+              </q-btn-dropdown>
+            </template>
           </div>
         </div>
 
@@ -97,6 +106,13 @@
                             <q-icon v-if="state.round.whoPlays === 1" name="double_arrow" size="150%" />
                             <q-icon v-if="state.round.winner === 1" name="emoji_events" size="150%" />
                             {{ state.round.player1 }}
+                            <q-btn
+                              v-if="state.round.whoPlays === 0"
+                              @click="updatePlayer1Name = true"
+                              flat round icon="edit" size="sm"
+                            >
+                              <q-tooltip>upravit jméno hráče</q-tooltip>
+                            </q-btn>
                           </div>
                         </q-item-section>
                       </q-item>
@@ -110,6 +126,13 @@
                             <q-icon v-if="state.round.whoPlays === 2" name="double_arrow" size="150%" />
                             <q-icon v-if="state.round.winner === 2" name="emoji_events" size="150%" />
                             {{ state.round.player2 }}
+                            <q-btn
+                              v-if="state.round.whoPlays === 0"
+                              @click="updatePlayer2Name = true"
+                              flat round icon="edit" size="sm"
+                            >
+                              <q-tooltip>upravit jméno hráče</q-tooltip>
+                            </q-btn>
                           </div>
                         </q-item-section>
                       </q-item>
@@ -274,20 +297,20 @@
       :value="dialog"
       @hide="dialog = false"
     >
-      <q-card style="max-width: 600px">
+      <q-card style="width: 100vw">
         <q-card-section>
           Na jiném zařízení přejděte na tento odkaz:<br>
           <a :href="socialLink" target="_blank" class="text-h6" style="text-decoration: none; color: inherit">{{ socialLink }}</a>
           <q-btn
-              flat
-              round
-              icon="content_copy"
-              class="copy"
-              :data-clipboard-text="socialLink"
-              size="sm"
-            >
-              <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
-            </q-btn>
+            flat
+            round
+            icon="content_copy"
+            class="copy"
+            :data-clipboard-text="socialLink"
+            size="sm"
+          >
+            <q-tooltip>kliknutím zkopírujete do schránky</q-tooltip>
+          </q-btn>
         </q-card-section>
 
         <q-card-section>
@@ -299,6 +322,48 @@
 
         <q-card-actions>
           <q-btn flat @click="dialog = false" class="text-secondary">rozumím</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="updatePlayer1Name">
+      <q-card style="width: 100vw">
+        <q-card-section>
+          <q-input
+            autofocus
+            filled
+            v-model="state.round.player1"
+            label="Jméno prvního hráče"
+            hint="Jak se jmenuje první hráč?"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit jméno prvního hráče.']"
+            @keypress.enter="updatePlayer1Name = false"
+          />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn @click="updatePlayer1Name = false">zrušit</q-btn>
+          <q-btn color="secondary" @click="updatePlayer1Name = false">potvrdit</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="updatePlayer2Name">
+      <q-card style="width: 100vw">
+        <q-card-section>
+          <q-input
+            autofocus
+            filled
+            v-model="state.round.player2"
+            label="Jméno druhého hráče"
+            hint="Jak se jmenuje druhý hráč?"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Nezapomeňte doplnit jméno druhého hráče.']"
+            @keypress.enter="updatePlayer2Name = false"
+          />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn @click="updatePlayer2Name = false">zrušit</q-btn>
+          <q-btn color="secondary" @click="updatePlayer2Name = false">potvrdit</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -337,7 +402,9 @@ export default {
       randomizedWinnerIs: -1,
       showRoundForm: false,
       dialog: false,
-      APP_PLAYER_LINK
+      APP_PLAYER_LINK,
+      updatePlayer1Name: false,
+      updatePlayer2Name: false
     }
   },
   computed: {
@@ -393,6 +460,24 @@ export default {
     '$route.params.round' () {
       this.showRoundForm = false
       this.reserveQuestions(this.fetch)
+    },
+
+    updatePlayer1Name (state) {
+      if (state === true) {
+        // dialog is opened, do nothing
+        return false
+      }
+
+      this.updatePlayerNames()
+    },
+
+    updatePlayer2Name (state) {
+      if (state === true) {
+        // dialog is opened, do nothing
+        return false
+      }
+
+      this.updatePlayerNames()
     }
   },
   created () {
@@ -677,6 +762,36 @@ export default {
           console.error(error)
         }
       }, 1000)
+    },
+
+    updatePlayerNames () {
+      if (!this.state.round.player1.trim().length) {
+        this.fetch() // pseudo reset
+        return false
+      }
+
+      if (!this.state.round.player2.trim().length) {
+        this.fetch() // pseudo reset
+        return false
+      }
+
+      try {
+        this.$sailsIo.socket.patch(`/v1/round/${this.$route.params.round}`, {
+          player1: this.state.round.player1,
+          player2: this.state.round.player2
+        }, (response) => {
+          if (!response) {
+            this.$smallgame.negative({
+              message: 'Není možné upravit jména hráčů. Zkuste obnovit stránku.'
+            })
+          }
+        })
+      } catch (error) {
+        console.error(error)
+        this.$smallgame.negative({
+          message: 'Není možné upravit jména hráčů. Zkuste obnovit stránku.'
+        })
+      }
     },
 
     reserveQuestions (cb) {
