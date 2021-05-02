@@ -35,7 +35,7 @@
             <q-btn
               icon="keyboard_backspace"
               @click="goBack"
-              class="q-mr-sm"
+              class="q-mr-sm q-mb-sm"
             >
               zpět
             </q-btn>
@@ -43,13 +43,13 @@
             <q-btn
               icon="help"
               @click="dialog = true"
-              class="q-mr-sm"
+              class="q-mr-sm q-mb-sm"
             >
               Jak hrát?
             </q-btn>
 
             <template v-if="state.round.winner === -1">
-              <q-btn-dropdown label="Ovládání" icon="gamepad">
+              <q-btn-dropdown label="Ovládání" icon="gamepad" class="q-mr-sm q-mb-sm">
                 <q-list>
                   <q-item clickable v-close-popup @click="pauseRound" :disable="loading || !isRunning" v-if="isRunning">
                     <q-item-section avatar>
