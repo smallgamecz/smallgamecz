@@ -1,6 +1,6 @@
 module.exports = {
 
-  friendlyName: 'Remove all games without a rounds with last visit older than 1 week.',
+  friendlyName: 'Remove all games without a rounds with last visit older than 30 days.',
 
   description: '',
 
@@ -16,7 +16,7 @@ module.exports = {
 
     try {
       const date = new Date()
-      date.setDate(date.getDate() - 7)
+      date.setDate(date.getDate() - 30)
 
       const games = await Game.find({
         lastSeen: {
