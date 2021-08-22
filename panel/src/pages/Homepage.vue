@@ -2,7 +2,7 @@
   <q-page>
     <div class="fixed-center text-center">
       <div>
-        <img src="/logo/favicon_1024_1024.png" alt="logo" width="300">
+        <img src="/logo/favicon_1024_1024.png" alt="Hraj!" width="300">
       </div>
       <div class="row q-col-gutter-sm">
         <div class="col-12">
@@ -16,7 +16,7 @@
           />
         </div>
         <div class="col-12 text-left relative-position">
-          <q-chip class="absolute-center bg-white">
+          <q-chip class="absolute-center bg-white" data-nosnippet>
             nebo vstupte přes
           </q-chip>
           <q-separator color="secondary" class="q-mt-md q-mb-md" />
