@@ -15,9 +15,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     passport.authenticate('linkedin', async (error, user) => {
-      console.log(user)
+      sails.log.error('error', error)
+      sails.log.error('user', user)
       if (error) {
-        sails.log.error(error)
         return this.req.res.redirect(`${process.env.PANEL_URL}/#/linkedin-auth-error`)
       }
 

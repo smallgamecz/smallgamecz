@@ -1,8 +1,9 @@
-var passport = require('passport'),
-  LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
+var passport = require('passport');
+
+var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
 
 var verifyHandler = function (accessToken, refreshToken, profile, done) {
-  process.nextTick(function () {
+  process.nextTick(() => {
     return done(null, profile)
   });
 };
@@ -12,5 +13,5 @@ passport.use(new LinkedInStrategy({
   clientSecret: process.env.LINKEDIN_SECRET,
   callbackURL: `${process.env.API_URL}/v1/auth/linkedin/callback`,
   scope: ['r_emailaddress', 'r_liteprofile'],
-  state: true
+  // state: true
 }, verifyHandler));
