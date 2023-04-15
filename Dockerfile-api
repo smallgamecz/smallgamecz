@@ -1,7 +1,7 @@
 FROM ghcr.io/smallgamecz/smallgamecz/node15110:15.11.0-alpine3.13
 LABEL MAINTAINER="Daniel Rataj <daniel.rataj@centrum.cz>"
 
-RUN apk add --no-cache openssl=1.1.1l-r0 \
+RUN apk add --no-cache openssl=1.1.1s-r0 \
   && rm -rf /var/cache/apk/*
 
 WORKDIR /app
